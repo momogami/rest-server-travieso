@@ -11,9 +11,10 @@ const clientesGet = async(req = request, res = response) => {
 }
 
 const clientesPost = async(req = request, res = response) => {
-    const { nombre, correo, rut, celular } = req.body;
-    const cliente = new Cliente({ nombre, correo, rut, celular });
-
+    const { nombre, apellido, correo, rut, celular } = req.body;
+    const cliente = new Cliente({ nombre, apellido, correo, rut, celular });
+    cliente.celular = "+56" + cliente.celular;
+   
     // Guardar en BD
     await cliente.save();
 

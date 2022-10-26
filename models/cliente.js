@@ -6,6 +6,10 @@ const ClienteSchema = Schema({
         type: String,
         required: [true, 'El nombre es obligatorio']
     },
+    apellido: {
+        type: String,
+        required: [true, 'El apellido es obligatorio']
+    },
     rut: {
         type: String,
         required: [true, 'El Rut es obligatorio']
