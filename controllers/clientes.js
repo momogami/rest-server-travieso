@@ -5,10 +5,24 @@ const Cliente = require('../models/cliente');
 
 
 const clientesGet = async(req = request, res = response) => {
+
+    const cliente = await Cliente.find()
+
     res.json({
-        msg: 'get API - controllers'
+        cliente
     })
 }
+
+const clienteGet = async(req = request, res = response) => {
+    
+    const { rut } = req.body;
+    const cliente = await Cliente.findOne( {rut} )
+    
+    res.json({
+        cliente
+    });
+}
+
 
 const clientesPost = async(req = request, res = response) => {
     const { nombre, apellido, correo, rut, celular } = req.body;
@@ -46,5 +60,6 @@ module.exports = {
     clientesDelete,
     clientesPost,
     clientesPut,
-    clientesPatch
+    clientesPatch,
+    clienteGet
 }

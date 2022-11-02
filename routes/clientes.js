@@ -17,12 +17,15 @@ const { clientesGet,
         clientesPut,
         clientesPost,
         clientesDelete,
-        clientesPatch} = require('../controllers/clientes')
+        clientesPatch,
+        clienteGet} = require('../controllers/clientes')
 
 const router = Router();
 
 
 router.get('/', clientesGet );
+
+router.get('/obtenerCliente', clienteGet );
 
 router.put('/', clientesPut);
 
