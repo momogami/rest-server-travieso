@@ -4,20 +4,29 @@ const XLSX = require('xlsx');
 const { generarPremium } = require('../helpers/generar-db-premium')
 
 const PremiumUnitario = require('../models/premiumUnitario')
+const SegundaUnitario = require('../models/SegundaUnitario')
+
 
 
 const cargarTablaDePuntos = async(req = request, res = response) => {
  
-    const excelPremium = XLSX.readFile(req.files.archivo.name);
+    /* const excelPremium = XLSX.readFile(req.files.archivo.name); */
+    const excelPremium = XLSX.read(req.files.archivo.name);
     const datosPremium = XLSX.utils.sheet_to_json(excelPremium.Sheets['Premium'])
     
     await generarPremium(datosPremium);
+
+    console.log(excelPremium)
+    
+    
     
     res.json({
         msg: 'Datos de Ropa Premium guardados'
     })
 
 }
+
+
 
 const borrarTodo = async(req = request, res = response) => {
     if( !PremiumUnitario ){
