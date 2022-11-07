@@ -37,7 +37,7 @@ router.post('/',[
         //Rut
         check('rut').custom( rutExiste ),
         check('rut', 'Rut no valido').not().isEmpty().isNumeric(),
-        check('rut').custom(esRutValido),
+        check('rut').custom( esRutValido ),
         //Correo
         check('correo', `El correo no es valido`).isEmail(),
         check('correo').custom( emailExisteClientes ),

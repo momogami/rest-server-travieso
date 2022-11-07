@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
 const { dbConnection } = require('../database/config');
 
@@ -9,11 +10,14 @@ class Server {
         this.app = express();
         this.port = process.env.PORT;
 
-        this.usuariosPath = '/api/usuarios';
-        this.authPath     = '/api/auth';
-        this.clientesPath = '/api/clientes'
-        this.premiumUnitarios = '/api/premiumUnitarios'
-
+        this.paths = {
+        usuarios:         '/api/usuarios',
+        auth:             '/api/auth',
+        clientes:         '/api/clientes',
+        uploads:          '/api/uploads',
+        valorCategorias:  '/api/valorCategorias',
+        
+        }
         // Conectar a base de datos
         this.conectarDB();
 
@@ -39,14 +43,21 @@ class Server {
         //Directorio Publico
         this.app.use(express.static('public'));
 
+        // File upload - Carga de archivos
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/'
+        }));
+
     }
 
     routes() {
 
-       this.app.use( this.authPath, require('../routes/auth'))
-       this.app.use( this.usuariosPath , require('../routes/usuarios'));
-       this.app.use( this.clientesPath , require('../routes/clientes'));
-       this.app.use( this.premiumUnitarios , require('../routes/premiumUnitarios'));
+       this.app.use( this.paths.auth, require('../routes/auth'))
+       this.app.use( this.paths.usuarios , require('../routes/usuarios'));
+       this.app.use( this.paths.clientes , require('../routes/clientes'));
+       this.app.use( this.paths.uploads, require('../routes/uploads'));
+       this.app.use( this.paths.valorCategorias, require('../routes/valorCategorias'));
     }
 
     listen() {
