@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const reciclajeUnitarioSchema = Schema({
+const ReciclajeUnitarioSchema = Schema({
     deuda: {
         type: String,
         required: [false, 'Valor puntos obligatorio']
@@ -8,4 +8,4 @@ const reciclajeUnitarioSchema = Schema({
         
 });
 
-module.exports = model( 'reciclajeUnitario', reciclajeUnitarioSchema )
+module.exports = model( 'ReciclajeUnitario', ReciclajeUnitarioSchema )
