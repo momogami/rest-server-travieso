@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const DonacionUnitarioSchema = Schema({
+const DescuentoUnitarioSchema = Schema({
     ropa: {
         type: String,
         required: [true, 'El nombre es obligatorio']
@@ -8,4 +8,4 @@ const DonacionUnitarioSchema = Schema({
       
 });
 
-module.exports = model( 'DonacionUnitario', DonacionUnitarioSchema )
+module.exports = model( 'DescuentoUnitario', DescuentoUnitarioSchema )
