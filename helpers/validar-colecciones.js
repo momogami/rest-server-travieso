@@ -1,6 +1,7 @@
 
-const PremiumUnitario = require('../models/premiumUnitario');
-const SegundaUnitario = require('../models/segundaUnitario');
+const PremiumUnitario   = require('../models/premiumUnitario');
+const SegundaUnitario   = require('../models/segundaUnitario');
+const DescuentoUnitario = require('../models/descuentoUnitario')
 
 const coleccionVacia = (categoria) => {
     if (categoria == 'Premium') {
@@ -16,6 +17,14 @@ const coleccionVacia = (categoria) => {
         return new Promise(async (resolve, reject) => {
             const objetoSegundaUnitario = await SegundaUnitario.find()
             const existenDatos = Object.entries(objetoSegundaUnitario).length === 0;
+            resolve({ existenDatos })
+        });
+    }
+
+    if (categoria == 'Descuento'){
+        return new Promise(async (resolve, reject) => {
+            const objetoDescuentoUnitario = await DescuentoUnitario.find()
+            const existenDatos = Object.entries(objetoDescuentoUnitario).length === 0;
             resolve({ existenDatos })
         });
     }

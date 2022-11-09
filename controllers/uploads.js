@@ -8,10 +8,41 @@ const { subirArchivo } = require('../helpers/subir-archivo');
 
 const PremiumUnitario = require('../models/premiumUnitario');
 const SegundaUnitario = require('../models/segundaUnitario');
+const DescuentoUnitario = require('../models/descuentoUnitario')
 const { request } = require("http");
 
 
+const cargarTablaDescuentos = async( req = request, res = response) => {
+        const descuentoVacia = await coleccionVacia('Descuento');
 
+        if( descuentoVacia.existenDatos == false ){
+            res.status(400).json({ msg: 'Ya hay datos Creados' });
+            return;
+        }
+
+        // Subida de Archivo a Upload y obtención del Path de este archivo
+        const resolve = await subirArchivo( req.files )
+
+        // Lectura del Archivo
+        const excel = XLSX.readFile( resolve.uploadPath );
+        const datosDescuento = XLSX.utils.sheet_to_json(excel.Sheets['Descuento'])
+       
+
+        datosDescuento.forEach(datosDescuento => {
+        
+        const realg4life = {
+            ropa: datosDescuento.Prenda,
+        }
+        
+        const { ropa } = realg4life
+        const descuentoUnitario = new DescuentoUnitario({ ropa })
+        descuentoUnitario.save()
+    });
+
+        res.json({
+            msg: 'funca'
+        })
+}
 
 const cargarTablaDePuntos = async(req = request, res = response) => {
     const premiumVacia = await coleccionVacia( 'Premium');
@@ -22,6 +53,7 @@ const cargarTablaDePuntos = async(req = request, res = response) => {
         res.status(400).json({msg: ' Una de las colecciones no esta vacia '});
         return;
     }
+
     // Ver si hay un archivo para subir
     if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
         res.status(400).json({msg: ' No hay archivo que subir '});
@@ -54,7 +86,7 @@ const cargarTablaDePuntos = async(req = request, res = response) => {
 
 const actualizarTablaDePuntos = async(req = request, res = response) => {
     // Ver la colección
-    const objetoPremiumUnitario = await premiumUnitario.find()
+    const objetoPremiumUnitario = await PremiumUnitario.find()
     // Revisa si el objeto esta vacio
     const existenDatos = Object.entries(objetoPremiumUnitario).length === 0;
 
@@ -147,5 +179,6 @@ module.exports = {
     borrarTodoPremium,
     cargarArchivo,
     actualizarTablaDePuntos,
-    borrarTodoSegunda
+    borrarTodoSegunda,
+    cargarTablaDescuentos
 }
