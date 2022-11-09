@@ -1,6 +1,7 @@
 
 const PremiumUnitario = require('../models/premiumUnitario');
 
+//Recibe los datos de la Conversión de Excel a Json
 const generarPremium = ( datos = '' ) => {
 
     const salida = []; // pa guardar las vainas procesadas

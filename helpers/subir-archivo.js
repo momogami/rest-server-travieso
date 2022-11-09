@@ -35,10 +35,6 @@ const subirArchivo = ( files ) => {
 
 }
 
-
-
-
-
 module.exports = { 
     subirArchivo
 }
