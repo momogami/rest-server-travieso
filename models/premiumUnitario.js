@@ -3,15 +3,15 @@ const { Schema, model } = require('mongoose');
 const PremiumUnitarioSchema = Schema({
     talla: {
         type: String,
-        required: [true, 'El nombre es obligatorio']
+        required: [true, 'La Talla es obligatorio']
     },
     ropa: {
         type: String,
-        required: [false, 'El apellido es obligatorio']
+        required: [false, 'Dato de ropa es obligatorio']
     },
     puntos: {
         type: String,
-        required: [false, 'El Rut es obligatorio']
+        required: [false, 'El Dato punto es obligatorio']
     },
     
     

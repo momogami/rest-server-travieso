@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 const ReciclajeUnitarioSchema = Schema({
     deuda: {
         type: String,
-        required: [false, 'Valor puntos obligatorio']
+        required: [false, 'Valor deuda obligatorio']
     },
         
 });
