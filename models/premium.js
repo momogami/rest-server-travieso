@@ -9,6 +9,10 @@ const PremiumSchema = Schema({
         type: Number,
         required: [false]
     },  
+    puntosTotales: {
+        type: Number,
+        required: [false]
+    },  
     
 });
 
