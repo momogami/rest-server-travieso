@@ -77,6 +77,19 @@ const usuariosDelete = async(req, res = response) => {
     res.json( usuario );
 }
 
+const obtenerUsuarios = async(req, res = response) => {
+    const listaUsuarios = [];
+    const usuarios = await Usuario.find()
+    //Recorrer la colección para obtener las tallas
+         usuarios.forEach(usuario => {
+            if(usuario.rol == 'USER_ROLE'){
+            const cosita = usuario.nombre
+            listaUsuarios.push(cosita)
+            }
+         }); 
+    
+    res.json( listaUsuarios )    
+}
 
 
 
@@ -86,4 +99,5 @@ module.exports = {
     usuariosPut,
     usuariosDelete,
     usuariosPatch,
+    obtenerUsuarios
 }
