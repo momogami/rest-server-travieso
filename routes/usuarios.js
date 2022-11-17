@@ -12,10 +12,10 @@ const {
 const { esRoleValido, emailExiste, existeUsuarioPorId } = require('../helpers/db-validatos');
 
 const { usuariosGet, 
-        usuariosPost, 
         usuariosPut, 
         usuariosDelete, 
-        usuariosPatch } = require('../controllers/usuarios');
+        usuariosPatch, 
+        crearUsuario} = require('../controllers/usuarios');
 
 
 const router = Router();
@@ -30,15 +30,14 @@ router.put('/:id',[
     validarCampos
 ] ,usuariosPut);
 
-router.post('/',[
+router.post('/crearUsuario',[
     check('nombre', 'El Nombre es Obligatorio').not().isEmpty(),
     check('password', 'El password debe contener mas de 6 letras').isLength({ min: 6 }),
     check('correo', 'El correo no es valido').isEmail(),
     check('correo').custom( emailExiste ),
     /* check('rol', 'No es un rol válido').isIn(['ADMIN_ROLE','USER_ROLE']), */
-    check('rol').custom( esRoleValido ),
     validarCampos
-], usuariosPost);
+], crearUsuario);
 
 router.delete('/:id',[
     validarJWT,

@@ -24,10 +24,15 @@ const usuariosGet = async(req = request, res = response) => {
     });
 }
 
-const usuariosPost = async(req, res = response) => {
+const crearUsuario = async(req, res = response) => {
 
-    const { nombre, correo, password, rol } = req.body;
-    const usuario = new Usuario({ nombre, correo, password, rol });
+    const { nombre, correo, password, repetirPassword } = req.body;
+
+    if(password != repetirPassword){
+        res.status(400).json({msg: ' La contraseña no es la misma '});
+        return;
+    }
+    const usuario = new Usuario({ nombre, correo, password, rol: 'USER_ROLE' });
 
     // Encriptar Password
     const salt = bcryptjs.genSaltSync();
@@ -77,7 +82,7 @@ const usuariosDelete = async(req, res = response) => {
 
 module.exports = {
     usuariosGet,
-    usuariosPost,
+    crearUsuario,
     usuariosPut,
     usuariosDelete,
     usuariosPatch,
