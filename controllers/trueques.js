@@ -10,7 +10,14 @@ const Descuento = require('../models/descuento');
 
 const crearTrueque = async(req = request, res = response) => {
     
-    const premium = new Premium();
+    const trueque = new Trueque();
+    const hoy = new Date();
+    const fecha = hoy.toLocaleDateString();
+    trueque.fecha = fecha;
+    console.log(typeof(fecha))
+    trueque.save();
+    
+/*     const premium = new Premium();
     const segunda = new Segunda();
     const donacion = new Donacion();
     const reciclaje = new Reciclaje();
@@ -20,7 +27,7 @@ const crearTrueque = async(req = request, res = response) => {
     segunda.save();
     donacion.save();
     reciclaje.save();
-    descuento.save();
+    descuento.save(); */
 
 
     res.json({
