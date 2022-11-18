@@ -15,19 +15,19 @@ const TruequeSchema = Schema({
     },
     idSegunda: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "usuarios"
+        ref: "segundas"
     },
     idDescuento: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "usuarios"
+        ref: "descuentos"
     },
     idDonacion: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "usuarios"
+        ref: "donacions"
     },
     idReciclaje: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "usuarios"
+        ref: "reciclajes"
     },
     descuento: {
         type: String,

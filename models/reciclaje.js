@@ -9,11 +9,11 @@ const ReciclajeSchema = Schema({
     // Preguntar a Daniela
     cantidad: {
         type: Number,
-        required: [true, 'Se necesita la cantidad de reciclaje' ]
+        required: [false, 'Se necesita la cantidad de reciclaje' ]
     },  
     kilos: {
         type: Number,
-        required: [true, 'Se necesitan los kilos de reciclaje']
+        required: [false, 'Se necesitan los kilos de reciclaje']
     }, 
     
 });

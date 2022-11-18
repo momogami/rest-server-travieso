@@ -16,7 +16,8 @@ class Server {
         clientes:         '/api/clientes',
         uploads:          '/api/uploads',
         premiums:         '/api/premiums',
-        premiumUnitarios:  '/api/premiumUnitarios',
+        premiumUnitarios: '/api/premiumUnitarios',
+        trueques:         '/api/trueques' , 
         
         }
         // Conectar a base de datos
@@ -60,6 +61,7 @@ class Server {
        this.app.use( this.paths.uploads, require('../routes/uploads'));
        this.app.use( this.paths.premiums, require('../routes/premiums'));
        this.app.use( this.paths.premiumUnitarios, require('../routes/premiumUnitarios'));
+       this.app.use( this.paths.trueques, require('../routes/trueques'));
     }
 
     listen() {
