@@ -4,7 +4,8 @@ const TruequeSchema = Schema({
     idUsuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "usuarios",
-        required: [true]
+        // Cambiar a true
+        required: [false]
     },
     idCliente: {
         type: mongoose.Schema.Types.ObjectId,

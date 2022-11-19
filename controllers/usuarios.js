@@ -27,12 +27,13 @@ const usuariosGet = async(req = request, res = response) => {
 const crearUsuario = async(req, res = response) => {
 
     const { nombre, apellido, correo, password, repetirPassword } = req.body;
-
+    // Unir nombre y apellido para obtener nombreCompleto
+    const nombreCompleto = `${nombre} ${apellido}`
     if(password != repetirPassword){
         res.status(400).json({msg: ' La contraseña no es la misma '});
         return;
     }
-    const usuario = new Usuario({ nombre, apellido, correo, password, rol: 'USER_ROLE' });
+    const usuario = new Usuario({ nombre, apellido, nombreCompleto, correo, password, rol: 'USER_ROLE' });
 
     // Encriptar Password
     const salt = bcryptjs.genSaltSync();
@@ -83,7 +84,7 @@ const obtenerUsuarios = async(req, res = response) => {
     //Recorrer la colección para obtener las tallas
          usuarios.forEach(usuario => {
             if(usuario.rol == 'USER_ROLE'){
-            const cosita = `${usuario.nombre} ${usuario.apellido}`
+            const cosita = usuario.nombreCompleto
             listaUsuarios.push(cosita)
             }
          }); 

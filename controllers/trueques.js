@@ -7,15 +7,25 @@ const Segunda   = require('../models/segunda');
 const Donacion  = require('../models/donación');
 const Reciclaje = require('../models/reciclaje');
 const Descuento = require('../models/descuento');
+const Usuario = require('../models/usuario');
 
 const crearTrueque = async(req = request, res = response) => {
-    
-    const trueque = new Trueque();
-    const hoy = new Date();
-    const fecha = hoy.toLocaleDateString();
-    trueque.fecha = fecha;
-    console.log(typeof(fecha))
-    trueque.save();
+// creamos el trueque
+const trueque = new Trueque();
+
+//obtemenos el nombre completo del colaborador
+const { nombreCompleto } = req.body;
+//buscamos al colaborador dentro de la DB Usuarios
+const colaborador = await Usuario.findOne( nombreCompleto )    
+//le añadimos al trueque el id del colaborador
+trueque.idUsuario = colaborador;
+
+//conseguimos la fecha actual
+const hoy = new Date();
+//añadimos la fecha al trueque
+trueque.fecha = hoy;
+//guardamos el trueque
+trueque.save();
     
 /*     const premium = new Premium();
     const segunda = new Segunda();
@@ -31,7 +41,7 @@ const crearTrueque = async(req = request, res = response) => {
 
 
     res.json({
-        msg: 'post API - controllers'
+        idTrueque: trueque._id
     })
 }
 
