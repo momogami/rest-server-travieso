@@ -26,13 +26,13 @@ const usuariosGet = async(req = request, res = response) => {
 
 const crearUsuario = async(req, res = response) => {
 
-    const { nombre, correo, password, repetirPassword } = req.body;
+    const { nombre, apellido, correo, password, repetirPassword } = req.body;
 
     if(password != repetirPassword){
         res.status(400).json({msg: ' La contraseña no es la misma '});
         return;
     }
-    const usuario = new Usuario({ nombre, correo, password, rol: 'USER_ROLE' });
+    const usuario = new Usuario({ nombre, apellido, correo, password, rol: 'USER_ROLE' });
 
     // Encriptar Password
     const salt = bcryptjs.genSaltSync();
