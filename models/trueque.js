@@ -3,7 +3,8 @@ const { Schema, model, mongoose } = require('mongoose');
 const TruequeSchema = Schema({
     idUsuario: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "usuarios"
+        ref: "usuarios",
+        required: [true]
     },
     idCliente: {
         type: mongoose.Schema.Types.ObjectId,
@@ -34,7 +35,7 @@ const TruequeSchema = Schema({
         required: [false]
     },  
     fecha: {
-        type: String,
+        type: Date,
         required: [true]
     }, 
     puntosTotales: {
