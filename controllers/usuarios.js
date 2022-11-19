@@ -83,7 +83,7 @@ const obtenerUsuarios = async(req, res = response) => {
     //Recorrer la colección para obtener las tallas
          usuarios.forEach(usuario => {
             if(usuario.rol == 'USER_ROLE'){
-            const cosita = usuario.nombre
+            const cosita = `${usuario.nombre} ${usuario.apellido}`
             listaUsuarios.push(cosita)
             }
          }); 
