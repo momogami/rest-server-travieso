@@ -1,7 +1,5 @@
 const { response, request } = require('express');
 
-const { obtenerJsonTrueque } = require('../helpers/obtener-datos-trueque')
-
 const Trueque            = require('../models/trueque');
 const Premium            = require('../models/premium');
 const PremiumUnitario    = require('../models/premiumUnitario');
@@ -93,9 +91,11 @@ const agregarPremium = async(req = request, res = response) => {
     
     
     res.json({
-        premiumUnitario: premiumUnitario,
-        premium: premium,
-        trueque: trueque
+        tipoTrueque: "Premium",
+        prenda:     premiumUnitario.prenda,
+        talla:      premiumUnitario.talla,
+        cantidad:   premium.cantidad,
+        puntos:     premium.puntos
 
     })
 }
@@ -126,9 +126,11 @@ const agregarSegunda = async(req = request, res = response) => {
     segunda.save();
 
     res.json({
-        segundaUnitario: segundaUnitario,
-        segunda: segunda,
-        trueque: trueque
+        tipoTrueque: "Segunda",
+        prenda:     segundaUnitario.ropa,
+        talla:      null,
+        cantidad:   segunda.cantidad,
+        puntos:     segunda.puntos
 
     })
 }
@@ -157,11 +159,12 @@ const agregarDescuento = async(req = request, res = response) => {
     trueque.save();
     descuento.save();    
 
-
     res.json({
-        descuentoUnitario: descuentoUnitario,
-        descuento: descuento,
-        trueque: trueque
+        tipoTrueque: "Descuento",
+        prenda:     descuentoUnitario.ropa,
+        talla:      null,
+        cantidad:   descuento.cantidad,
+        puntos:     null
 
     })
 }
