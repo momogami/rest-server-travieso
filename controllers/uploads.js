@@ -1,4 +1,6 @@
 const { response } = require("express");
+const { request } = require("http");
+
 const XLSX = require('xlsx');
 const fs = require('fs');
 
@@ -6,10 +8,11 @@ const { generarPremium } = require('../helpers/generar-db-premium')
 const { generarSegunda, coleccionVacia } = require('../helpers/index')
 const { subirArchivo } = require('../helpers/subir-archivo');
 
-const PremiumUnitario = require('../models/premiumUnitario');
-const SegundaUnitario = require('../models/segundaUnitario');
-const DescuentoUnitario = require('../models/descuentoUnitario')
-const { request } = require("http");
+const PremiumUnitario   = require('../models/premiumUnitario');
+const SegundaUnitario   = require('../models/segundaUnitario');
+const DescuentoUnitario = require('../models/descuentoUnitario');
+const DonacionUnitario  = require('../models/donaciónUnitario');
+
 
 
 const cargarTablaDescuentos = async( req = request, res = response) => {
@@ -42,6 +45,38 @@ const cargarTablaDescuentos = async( req = request, res = response) => {
         res.json({
             msg: 'funca'
         })
+}
+
+const cargarTablaDonacion = async( req = request, res = response) => {
+    const donacionVacia = await coleccionVacia('Donacion');
+
+    if( donacionVacia.existenDatos == false ){
+        res.status(400).json({ msg: 'Ya hay datos Creados' });
+        return;
+    }
+
+    // Subida de Archivo a Upload y obtención del Path de este archivo
+    const resolve = await subirArchivo( req.files )
+
+    // Lectura del Archivo
+    const excel = XLSX.readFile( resolve.uploadPath );
+    const datosDonacion = XLSX.utils.sheet_to_json(excel.Sheets['Donacion'])
+   
+
+    datosDonacion.forEach(datoDonacion => {
+    
+    const realg4life = {
+        ropa: datoDonacion.Prenda,
+    }
+    
+    const { ropa } = realg4life
+    const donacionUnitario = new DonacionUnitario({ ropa })
+    donacionUnitario.save()
+});
+
+    res.json({
+        msg: 'funca'
+    })
 }
 
 const cargarTablaDePuntos = async(req = request, res = response) => {
@@ -180,5 +215,6 @@ module.exports = {
     cargarArchivo,
     actualizarTablaDePuntos,
     borrarTodoSegunda,
-    cargarTablaDescuentos
+    cargarTablaDescuentos,
+    cargarTablaDonacion
 }

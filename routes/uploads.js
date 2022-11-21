@@ -3,7 +3,7 @@ const { check } = require('express-validator');
 
 const router = Router();
 
-const { cargarTablaDePuntos, borrarTodoPremium, cargarArchivo, actualizarTablaDePuntos, borrarTodoSegunda, cargarTablaDescuentos  } = require('../controllers/uploads');
+const { cargarTablaDePuntos, borrarTodoPremium, cargarArchivo, actualizarTablaDePuntos, borrarTodoSegunda, cargarTablaDescuentos, cargarTablaDonacion  } = require('../controllers/uploads');
 
 
 router.post( '/', cargarArchivo )
@@ -11,6 +11,8 @@ router.post( '/', cargarArchivo )
 router.post( '/cargarTablaDePuntos', cargarTablaDePuntos )
 
 router.post( '/cargarTablaDescuentos', cargarTablaDescuentos )
+
+router.post( '/cargarTablaDonacion', cargarTablaDonacion)
 
 router.put('/actualizarTablaDePuntos', actualizarTablaDePuntos)
 

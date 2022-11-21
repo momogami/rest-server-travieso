@@ -1,13 +1,14 @@
 
 const PremiumUnitario   = require('../models/premiumUnitario');
 const SegundaUnitario   = require('../models/segundaUnitario');
-const DescuentoUnitario = require('../models/descuentoUnitario')
+const DescuentoUnitario = require('../models/descuentoUnitario');
+const DonacionUnitario  = require('../models/donaciónUnitario')
 
 const coleccionVacia = (categoria) => {
     if (categoria == 'Premium') {
 
         return new Promise(async (resolve, reject) => {
-            const objetoPremiumUnitario = await PremiumUnitario.find()
+            const objetoPremiumUnitario = await PremiumUnitario.find();
             const existenDatos = Object.entries(objetoPremiumUnitario).length === 0;
             resolve({ existenDatos })
         });
@@ -15,7 +16,7 @@ const coleccionVacia = (categoria) => {
 
     if (categoria == 'Segunda'){
         return new Promise(async (resolve, reject) => {
-            const objetoSegundaUnitario = await SegundaUnitario.find()
+            const objetoSegundaUnitario = await SegundaUnitario.find();
             const existenDatos = Object.entries(objetoSegundaUnitario).length === 0;
             resolve({ existenDatos })
         });
@@ -23,10 +24,18 @@ const coleccionVacia = (categoria) => {
 
     if (categoria == 'Descuento'){
         return new Promise(async (resolve, reject) => {
-            const objetoDescuentoUnitario = await DescuentoUnitario.find()
+            const objetoDescuentoUnitario = await DescuentoUnitario.find();
             const existenDatos = Object.entries(objetoDescuentoUnitario).length === 0;
             resolve({ existenDatos })
         });
+    }
+
+    if (categoria == 'Donacion'){
+        return new Promise(async (resolve, reject) => {
+            const objetoDonacionUnitario = await DonacionUnitario.find();
+            const existenDatos = Object.entries(objetoDonacionUnitario).length === 0;
+            resolve({existenDatos})
+        })
     }
 
 }
