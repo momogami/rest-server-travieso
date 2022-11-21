@@ -18,7 +18,8 @@ const Cliente            = require('../models/cliente');
 const crearTrueque = async(req = request, res = response) => {
     // creamos el trueque
     const trueque = new Trueque();
-
+    // puntosTotales parten en 0
+    trueque.puntosTotales = 0;
     //obtemenos el nombre completo del colaborador
     const { nombreCompleto } = req.body;
     //buscamos al colaborador dentro de la DB Usuarios
@@ -80,10 +81,10 @@ const agregarPremium = async(req = request, res = response) => {
     premium.idPremiumUnitario = premiumUnitario._id;
     premium.cantidad          = cantidad;
     premium.puntos            = cantidad * premiumUnitario.puntos;
-
+    
     // añadir idPremium a Trueque
-    trueque.idPremium         = premium._id;
-
+    trueque.idPremium.push(premium._id);
+    trueque.puntosTotales     = trueque.puntosTotales + (cantidad * premiumUnitario.puntos)
     //guardar adiciones 
     trueque.save();
     premium.save();
@@ -104,20 +105,20 @@ const agregarSegunda = async(req = request, res = response) => {
     // buscar el trueque a traves del _id
     const trueque = await Trueque.findById( idTrueque )
 
-    // buscar el premiumUnitario
+    // buscar el segundaUnitario
     const segundaUnitario = await SegundaUnitario.findOne({ ropa: ropa })
 
-    // crear nueva collecion premium
+    // crear nueva collecion segunda
     const segunda = new Segunda();
 
-    // añadir id y cantidad de ropa premiumUnitario a Premium
+    // añadir id y cantidad de ropa segundaUnitario a Segunda
     segunda.idSegundaUnitario = segundaUnitario._id;
     segunda.cantidad          = cantidad;
     segunda.puntos            = cantidad * segundaUnitario.puntos;
 
-    // añadir idPremium a Trueque
-    trueque.idSegunda         = segunda._id;
-
+    // añadir idSegunda a Trueque
+    trueque.idSegunda.push(segunda._id);
+    trueque.puntosTotales     = trueque.puntosTotales + (cantidad * segundaUnitario.puntos)
     //guardar adiciones 
     trueque.save();
     segunda.save();
@@ -148,7 +149,7 @@ const agregarDescuento = async(req = request, res = response) => {
     descuento.cantidad            = cantidad;
 
     // añadir idPremium a Trueque
-    trueque.idDescuento         = descuento._id;
+    trueque.idDescuento.push( descuento._id )
 
     //guardar adiciones 
     trueque.save();
@@ -164,13 +165,37 @@ const agregarDescuento = async(req = request, res = response) => {
 }
 
 const agregarReciclaje = async(req = request, res = response) => {
-    
-    const reciclajeUnitario = new ReciclajeUnitario();
-    reciclajeUnitario.deuda = 990;
-    reciclajeUnitario.save();
+    // obtener los datos entregados por el body
+    const { idTrueque, idReciclaje, kilos, cantidad} = req.body;
+
+    // buscar el trueque a traves del _id
+    const trueque = await Trueque.findById( idTrueque )
+
+    // buscar el reciclajeUnitario
+    const reciclajeUnitario = await ReciclajeUnitario.findOne({ idReciclajeUnitario: idReciclaje })
+
+    // crear nueva collecion reciclaje
+    const reciclaje = new Reciclaje();
+
+    // añadir id y cantidad hilado textil reciclajeUnitario a Reciclaje
+    reciclaje.idReciclajeUnitario = reciclajeUnitario._id;
+    reciclaje.cantidad            = cantidad;
+    reciclaje.kilos               = kilos;
+    reciclaje.deuda               = kilos * reciclajeUnitario.deuda
+
+    // añadir idPremium a Trueque
+    trueque.idReciclaje           = reciclaje._id;
+
+    //guardar adiciones 
+    trueque.save();
+    reciclaje.save();    
+
 
     res.json({
-        msg: reciclajeUnitario
+        reciclajeUnitario: reciclajeUnitario,
+        reciclaje: reciclaje,
+        trueque: trueque
+
     })
 }
 

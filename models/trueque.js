@@ -11,22 +11,22 @@ const TruequeSchema = Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "clientes"
     },
-    idPremium: {
+    idPremium: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "premia"
-    },
-    idSegunda: {
+    }],
+    idSegunda: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "segundas"
-    },
-    idDescuento: {
+    }],
+    idDescuento: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "descuentos"
-    },
-    idDonacion: {
+    }],
+    idDonacion: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "donacions"
-    },
+    }],
     idReciclaje: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "reciclajes"
