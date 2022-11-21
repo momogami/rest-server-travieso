@@ -4,7 +4,7 @@ const ReciclajeSchema = Schema({
     idReciclajeUnitario: {
         type: mongoose.Schema.Types.ObjectId,
         // Revisar DB
-        ref: ""
+        ref: "reciclajeunitarios"
     },
     // Preguntar a Daniela
     cantidad: {
@@ -14,7 +14,10 @@ const ReciclajeSchema = Schema({
     kilos: {
         type: Number,
         required: [false, 'Se necesitan los kilos de reciclaje']
-    }, 
+    },
+    deuda: {
+        type: Number,
+    }
     
 });
 

@@ -7,8 +7,9 @@ const PremiumUnitario    = require('../models/premiumUnitario');
 const Segunda            = require('../models/segunda');
 const SegundaUnitario    = require('../models/segundaUnitario');
 const Donacion           = require('../models/donación');
-const DescuentoUnitario   = require('../models/descuentoUnitario');
+const DescuentoUnitario  = require('../models/descuentoUnitario');
 const Reciclaje          = require('../models/reciclaje');
+const ReciclajeUnitario  = require('../models/reciclajeUnitario');
 const Descuento          = require('../models/descuento');
 const Usuario            = require('../models/usuario');
 const Cliente            = require('../models/cliente');
@@ -162,10 +163,22 @@ const agregarDescuento = async(req = request, res = response) => {
     })
 }
 
+const agregarReciclaje = async(req = request, res = response) => {
+    
+    const reciclajeUnitario = new ReciclajeUnitario();
+    reciclajeUnitario.deuda = 990;
+    reciclajeUnitario.save();
+
+    res.json({
+        msg: reciclajeUnitario
+    })
+}
+
 module.exports = {
     crearTrueque,
     agregarCliente,
     agregarPremium,
     agregarSegunda,
-    agregarDescuento
+    agregarDescuento,
+    agregarReciclaje
 }
