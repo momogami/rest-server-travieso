@@ -1,14 +1,16 @@
 const { response, request } = require('express');
 
 
-const Trueque   = require('../models/trueque');
-const Premium   = require('../models/premium');
-const Segunda   = require('../models/segunda');
-const Donacion  = require('../models/donación');
-const Reciclaje = require('../models/reciclaje');
-const Descuento = require('../models/descuento');
-const Usuario = require('../models/usuario');
-const Cliente = require('../models/cliente')
+const Trueque            = require('../models/trueque');
+const Premium            = require('../models/premium');
+const PremiumUnitario    = require('../models/premiumUnitario');
+const Segunda            = require('../models/segunda');
+const Donacion           = require('../models/donación');
+const Reciclaje          = require('../models/reciclaje');
+const Descuento          = require('../models/descuento');
+const Usuario            = require('../models/usuario');
+const Cliente            = require('../models/cliente');
+
 
 const crearTrueque = async(req = request, res = response) => {
     // creamos el trueque
@@ -58,7 +60,42 @@ const agregarCliente = async(req = request, res = response) => {
     })
 }
 
+const agregarPremium = async(req = request, res = response) => {
+    // obtener los datos entregados por el body
+    const { idTrueque, ropa, talla, cantidad} = req.body;
+
+    // buscar el trueque a traves del _id
+    const trueque = await Trueque.findById( idTrueque )
+
+    // buscar el premiumUnitario
+    const premiumUnitario = await PremiumUnitario.findOne({ ropa: ropa, talla: talla })
+
+    // crear nueva collecion premium
+    const premium = new Premium();
+
+    // añadir id y cantidad de ropa premiumUnitario a Premium
+    premium.idPremiumUnitario = premiumUnitario._id;
+    premium.cantidad          = cantidad;
+    premium.puntos            = cantidad * premiumUnitario.puntos;
+
+    // añadir idPremium a Trueque
+    trueque.idPremium         = premium._id;
+
+    //guardar adiciones 
+    trueque.save();
+    premium.save();
+    
+    
+    res.json({
+        premiumUnitario: premiumUnitario,
+        premium: premium,
+        trueque: trueque
+
+    })
+}
+
 module.exports = {
     crearTrueque,
-    agregarCliente
+    agregarCliente,
+    agregarPremium
 }
