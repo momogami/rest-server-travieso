@@ -1,5 +1,6 @@
 const { response, request } = require('express');
 
+const { obtenerJsonTrueque } = require('../helpers/obtener-datos-trueque')
 
 const Trueque            = require('../models/trueque');
 const Premium            = require('../models/premium');
@@ -240,6 +241,15 @@ const resumenTrueque = async( req = request, res = response) => {
     })
 }
 
+const pruebaConcepto = async( req = request, res = response ) => {
+
+    const { idTrueque } = req.body;  
+
+    
+
+    res.json( {msg: await obtenerJsonTrueque( idTrueque )} )
+}
+
 module.exports = {
     crearTrueque,
     agregarCliente,
@@ -249,4 +259,5 @@ module.exports = {
     agregarReciclaje,
     agregarDonacion,
     resumenTrueque,
+    pruebaConcepto
 }
