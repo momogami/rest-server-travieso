@@ -1,7 +1,7 @@
 const { Schema, model, mongoose } = require('mongoose');
 
 const DescuentoSchema = Schema({
-    idPremiumUnitario: {
+    idDescuentoUnitario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "descuentounitarios"
     },

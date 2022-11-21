@@ -7,6 +7,7 @@ const PremiumUnitario    = require('../models/premiumUnitario');
 const Segunda            = require('../models/segunda');
 const SegundaUnitario    = require('../models/segundaUnitario');
 const Donacion           = require('../models/donación');
+const DescuentoUnitario   = require('../models/descuentoUnitario');
 const Reciclaje          = require('../models/reciclaje');
 const Descuento          = require('../models/descuento');
 const Usuario            = require('../models/usuario');
@@ -128,9 +129,43 @@ const agregarSegunda = async(req = request, res = response) => {
     })
 }
 
+const agregarDescuento = async(req = request, res = response) => {
+    // obtener los datos entregados por el body
+    const { idTrueque, ropa, cantidad} = req.body;
+
+    // buscar el trueque a traves del _id
+    const trueque = await Trueque.findById( idTrueque )
+
+    // buscar el descuentoUnitario
+    const descuentoUnitario = await DescuentoUnitario.findOne({ ropa: ropa })
+
+    // crear nueva collecion descuento
+    const descuento = new Descuento();
+
+    // añadir id y cantidad de ropa descuentoUnitario a Descuento
+    descuento.idDescuentoUnitario = descuentoUnitario._id;
+    descuento.cantidad            = cantidad;
+
+    // añadir idPremium a Trueque
+    trueque.idDescuento         = descuento._id;
+
+    //guardar adiciones 
+    trueque.save();
+    descuento.save();    
+
+
+    res.json({
+        descuentoUnitario: descuentoUnitario,
+        descuento: descuento,
+        trueque: trueque
+
+    })
+}
+
 module.exports = {
     crearTrueque,
     agregarCliente,
     agregarPremium,
-    agregarSegunda
+    agregarSegunda,
+    agregarDescuento
 }
