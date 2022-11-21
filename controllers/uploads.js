@@ -40,7 +40,10 @@ const cargarTablaDescuentos = async( req = request, res = response) => {
         const { ropa } = realg4life
         const descuentoUnitario = new DescuentoUnitario({ ropa })
         descuentoUnitario.save()
+
+        
     });
+        await fs.unlinkSync(resolve.uploadPath)
 
         res.json({
             msg: 'funca'
@@ -73,6 +76,7 @@ const cargarTablaDonacion = async( req = request, res = response) => {
     const donacionUnitario = new DonacionUnitario({ ropa })
     donacionUnitario.save()
 });
+    await fs.unlinkSync(resolve.uploadPath)
 
     res.json({
         msg: 'funca'
@@ -206,6 +210,37 @@ const borrarTodoSegunda = async(req = request, res = response) => {
 
 }
 
+const borrarTodoDescuento = async(req = request, res = response) => {
+    const descuentoVacia = await coleccionVacia('Descuento');
+
+    if( descuentoVacia.existenDatos == true ){
+        res.status(400).json({ msg: 'No hay una base de datos para borrar' });
+        return;
+    }
+    //Borra la colleción Premium
+    DescuentoUnitario.collection.drop();
+    //Mensaje de Salida
+    res.json({
+        msg: 'Los datos de toda las categorias fueron borrados'
+    })
+
+}
+
+const borrarTodoDonacion = async(req = request, res = response) => {
+    const donacionVacia = await coleccionVacia('Donacion');
+
+    if( donacionVacia.existenDatos == true ){
+        res.status(400).json({ msg: 'No hay una base de datos para borrar' });
+        return;
+    }
+    //Borra la colleción Premium
+    DonacionUnitario.collection.drop();
+    //Mensaje de Salida
+    res.json({
+        msg: 'Los datos de toda las categorias fueron borrados'
+    })
+
+}
 
 
 
@@ -216,5 +251,7 @@ module.exports = {
     actualizarTablaDePuntos,
     borrarTodoSegunda,
     cargarTablaDescuentos,
-    cargarTablaDonacion
+    cargarTablaDonacion,
+    borrarTodoDescuento,
+    borrarTodoDonacion
 }
