@@ -3,7 +3,7 @@ const { Schema, model, mongoose } = require('mongoose');
 const DonacionSchema = Schema({
     idDonacionUnitario: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: ""
+        ref: "donacionunitarios"
     },
     cantidad: {
         type: Number,

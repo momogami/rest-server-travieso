@@ -7,6 +7,7 @@ const PremiumUnitario    = require('../models/premiumUnitario');
 const Segunda            = require('../models/segunda');
 const SegundaUnitario    = require('../models/segundaUnitario');
 const Donacion           = require('../models/donación');
+const DonacionUnitario   = require('../models/donaciónUnitario')
 const DescuentoUnitario  = require('../models/descuentoUnitario');
 const Reciclaje          = require('../models/reciclaje');
 const ReciclajeUnitario  = require('../models/reciclajeUnitario');
@@ -84,7 +85,7 @@ const agregarPremium = async(req = request, res = response) => {
     
     // añadir idPremium a Trueque
     trueque.idPremium.push(premium._id);
-    trueque.puntosTotales     = trueque.puntosTotales + (cantidad * premiumUnitario.puntos)
+    
     //guardar adiciones 
     trueque.save();
     premium.save();
@@ -118,7 +119,7 @@ const agregarSegunda = async(req = request, res = response) => {
 
     // añadir idSegunda a Trueque
     trueque.idSegunda.push(segunda._id);
-    trueque.puntosTotales     = trueque.puntosTotales + (cantidad * segundaUnitario.puntos)
+    
     //guardar adiciones 
     trueque.save();
     segunda.save();
@@ -199,11 +200,53 @@ const agregarReciclaje = async(req = request, res = response) => {
     })
 }
 
+const agregarDonacion = async(req = request, res = response) => {
+    // obtener los datos entregados por el body
+    const { idTrueque, cantidad, ropa} = req.body;
+
+    // buscar el trueque a traves del _id
+    const trueque = await Trueque.findById( idTrueque )
+
+    // buscar el donacionUnitario
+    const donacionUnitario = await DonacionUnitario.findOne({ ropa: ropa })
+
+    // crear nueva collecion reciclaje
+    const donacion = new Donacion();
+
+    // añadir id y cantidad hilado textil reciclajeUnitario a Reciclaje
+    donacion.idReciclajeUnitario = donacionUnitario._id;
+    donacion.cantidad            = cantidad;
+    
+
+    // añadir idPremium a Trueque
+    trueque.idDonacion.push( donacion._id )
+
+    //guardar adiciones 
+    trueque.save();
+    donacion.save();    
+
+
+    res.json({
+        donacionUnitario: donacionUnitario,
+        donacion: donacion,
+        trueque: trueque
+
+    })
+}
+
+const resumenTrueque = async( req = request, res = response) => {
+    res.json({
+        msg: 'funca'
+    })
+}
+
 module.exports = {
     crearTrueque,
     agregarCliente,
     agregarPremium,
     agregarSegunda,
     agregarDescuento,
-    agregarReciclaje
+    agregarReciclaje,
+    agregarDonacion,
+    resumenTrueque,
 }
