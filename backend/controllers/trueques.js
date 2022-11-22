@@ -35,19 +35,6 @@ const crearTrueque = async(req = request, res = response) => {
     trueque.fecha = hoy;
     //guardamos el trueque
     trueque.save();
-    
-/*     const premium = new Premium();
-    const segunda = new Segunda();
-    const donacion = new Donacion();
-    const reciclaje = new Reciclaje();
-    const descuento = new Descuento();
-    
-    premium.save();
-    segunda.save();
-    donacion.save();
-    reciclaje.save();
-    descuento.save(); */
-
 
     res.json({
         idTrueque: trueque._id
@@ -310,8 +297,6 @@ const historialTrueques = async(req = request, res = response) => {
     
     for (i = 0; i < trueques.length; i++) {
         const cliente = await Cliente.findById(trueques[i].idCliente)
-
-        console.log(cliente)
 
         jsonInicial = {
             nombreCompleto: `${cliente.nombre} ${cliente.apellido}`,
