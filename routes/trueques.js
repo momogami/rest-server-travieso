@@ -3,7 +3,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 
-const { crearTrueque, agregarCliente, agregarPremium, agregarSegunda, agregarDescuento, agregarReciclaje, resumenTrueque, agregarDonacion } = require('../controllers/trueques');
+const { crearTrueque, agregarCliente, agregarPremium, agregarSegunda, agregarDescuento, agregarReciclaje, resumenTrueque, agregarDonacion, historialTrueques } = require('../controllers/trueques');
 
 const router = Router();
 
@@ -23,6 +23,8 @@ router.post('/agregarReciclaje', agregarReciclaje);
 router.post('/agregarDonacion', agregarDonacion)
 
 router.get('/resumenTrueque', resumenTrueque)
+
+router.get('/historialTrueques',historialTrueques)
 
 
 module.exports = router;

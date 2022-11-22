@@ -42,7 +42,11 @@ const TruequeSchema = Schema({
     puntosTotales: {
         type: Number,
         required: [false]
-    }, 
+    },
+    deudaTotal: {
+        type: Number,
+        required: [false]
+    },
 
     
 });

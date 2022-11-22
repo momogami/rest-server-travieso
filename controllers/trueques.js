@@ -13,6 +13,7 @@ const ReciclajeUnitario  = require('../models/reciclajeUnitario');
 const Descuento          = require('../models/descuento');
 const Usuario            = require('../models/usuario');
 const Cliente            = require('../models/cliente');
+const cli = require('nodemon/lib/cli');
 
 
 
@@ -285,6 +286,10 @@ const resumenTrueque = async(req = request, res = response) => {
     //Reciclaje
     const reciclaje = await Reciclaje.findById( trueque.idReciclaje )
 
+    trueque.puntosTotales = puntosTotalesPremium + puntosTotalesSegunda;
+    trueque.deudaTotal    = reciclaje.deuda;
+
+    trueque.save()
 
     const resumenTrueque = { 
         cantidadPrimeraSegunda : cantidadTotalPremium + cantidadTotalSegunda,
@@ -298,6 +303,30 @@ const resumenTrueque = async(req = request, res = response) => {
     res.json( resumenTrueque )
 }
 
+const historialTrueques = async(req = request, res = response) => {
+    
+    const trueques = await Trueque.find()
+    const jsonFinal = [];
+    
+    for (i = 0; i < trueques.length; i++) {
+        const cliente = await Cliente.findById(trueques[i].idCliente)
+
+        console.log(cliente)
+
+        jsonInicial = {
+            nombreCompleto: `${cliente.nombre} ${cliente.apellido}`,
+            rut: cliente.rut,
+            correo: cliente.correo,
+            puntos: trueques[i].puntosTotales
+        }
+
+        jsonFinal.push( jsonInicial )
+    }
+
+
+    res.json( jsonFinal )
+}
+
 module.exports = {
     crearTrueque,
     agregarCliente,
@@ -307,5 +336,6 @@ module.exports = {
     agregarReciclaje,
     agregarDonacion,
     resumenTrueque,
+    historialTrueques
     
 }
