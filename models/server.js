@@ -11,14 +11,15 @@ class Server {
         this.port = process.env.PORT;
 
         this.paths = {
-        usuarios:         '/api/usuarios',
-        auth:             '/api/auth',
-        clientes:         '/api/clientes',
-        uploads:          '/api/uploads',
-        premiums:         '/api/premiums',
-        premiumUnitarios: '/api/premiumUnitarios',
-        trueques:         '/api/trueques' , 
-        
+        usuarios:                 '/api/usuarios',
+        auth:                     '/api/auth',
+        clientes:                 '/api/clientes',
+        uploads:                  '/api/uploads',
+        premiums:                 '/api/premiums',
+        premiumUnitarios:         '/api/premiumUnitarios',
+        trueques:                 '/api/trueques' , 
+        reciclajeUnitarios:       '/api/reciclajeUnitarios'
+
         }
         // Conectar a base de datos
         this.conectarDB();
@@ -62,6 +63,7 @@ class Server {
        this.app.use( this.paths.premiums, require('../routes/premiums'));
        this.app.use( this.paths.premiumUnitarios, require('../routes/premiumUnitarios'));
        this.app.use( this.paths.trueques, require('../routes/trueques'));
+       this.app.use( this.paths.reciclajeUnitarios, require('../routes/reciclajeUnitarios'))
     }
 
     listen() {

@@ -2,7 +2,7 @@
 const PremiumUnitario   = require('../models/premiumUnitario');
 const SegundaUnitario   = require('../models/segundaUnitario');
 const DescuentoUnitario = require('../models/descuentoUnitario');
-const DonacionUnitario  = require('../models/donaciónUnitario')
+const DonacionUnitario  = require('../models/donaciónUnitario');
 
 const coleccionVacia = (categoria) => {
     if (categoria == 'Premium') {
