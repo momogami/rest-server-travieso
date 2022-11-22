@@ -15,6 +15,7 @@ const Usuario            = require('../models/usuario');
 const Cliente            = require('../models/cliente');
 
 
+
 const crearTrueque = async(req = request, res = response) => {
     // creamos el trueque
     const trueque = new Trueque();
@@ -242,10 +243,59 @@ const agregarDonacion = async(req = request, res = response) => {
     })
 }
 
-const resumenTrueque = async( req = request, res = response) => {
-    res.json({
-        msg: 'funca'
-    })
+const resumenTrueque = async(req = request, res = response) => {
+    const { idTrueque } = req.body;
+
+    const trueque = await Trueque.findById( idTrueque );
+
+    //Premium
+    let cantidadTotalPremium = 0;
+    let puntosTotalesPremium = 0;
+    //Segunda
+    let cantidadTotalSegunda = 0;
+    let puntosTotalesSegunda = 0;
+    //Descuento 
+    let cantidadTotalDonacion = 0;
+
+    //Premium
+    for (i = 0; i < trueque.idPremium.length; i++) {
+        const premium = await Premium.findById( trueque.idPremium[i] )
+        
+
+        cantidadTotalPremium = cantidadTotalPremium + premium.cantidad
+        puntosTotalesPremium = puntosTotalesPremium + premium.puntos
+
+    }
+
+    //Segunda
+    for (i = 0; i < trueque.idSegunda.length; i++) {
+        const segunda = await Segunda.findById( trueque.idSegunda[i] )
+        
+        cantidadTotalSegunda = cantidadTotalSegunda + segunda.cantidad
+        puntosTotalesSegunda = puntosTotalesSegunda + segunda.puntos
+
+    }
+
+    //Descuento
+    for (i = 0; i < trueque.idDescuento.length; i++) {
+        const descuento = await Descuento.findById( trueque.idDescuento[i] )
+        
+        cantidadTotalDonacion = cantidadTotalDonacion + descuento.cantidad
+    }
+    //Reciclaje
+    const reciclaje = await Reciclaje.findById( trueque.idReciclaje )
+
+
+    const resumenTrueque = { 
+        cantidadPrimeraSegunda : cantidadTotalPremium + cantidadTotalSegunda,
+        puntosTotales          : puntosTotalesPremium + puntosTotalesSegunda,
+        cantidadDonacion       : cantidadTotalDonacion,
+        deudaReciclaje         : reciclaje.deuda
+    }
+
+    
+
+    res.json( resumenTrueque )
 }
 
 module.exports = {
