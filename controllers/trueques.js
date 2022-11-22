@@ -197,9 +197,11 @@ const agregarReciclaje = async(req = request, res = response) => {
 
 
     res.json({
-        reciclajeUnitario: reciclajeUnitario,
-        reciclaje: reciclaje,
-        trueque: trueque
+        tipoTrueque: "Reciclaje",
+        prenda:     reciclajeUnitario.ropa,
+        talla:      null,
+        cantidad:   `${reciclaje.cantidad} / ${reciclaje.kilos}kilos `,
+        puntos:     -reciclaje.deuda
 
     })
 }
@@ -231,9 +233,11 @@ const agregarDonacion = async(req = request, res = response) => {
 
 
     res.json({
-        donacionUnitario: donacionUnitario,
-        donacion: donacion,
-        trueque: trueque
+        tipoTrueque: "Donacion",
+        prenda:     donacionUnitario.ropa,
+        talla:      null,
+        cantidad:   donacion.cantidad,
+        puntos:     null
 
     })
 }
@@ -242,15 +246,6 @@ const resumenTrueque = async( req = request, res = response) => {
     res.json({
         msg: 'funca'
     })
-}
-
-const pruebaConcepto = async( req = request, res = response ) => {
-
-    const { idTrueque } = req.body;  
-
-    
-
-    res.json( {msg: await obtenerJsonTrueque( idTrueque )} )
 }
 
 module.exports = {
@@ -262,5 +257,5 @@ module.exports = {
     agregarReciclaje,
     agregarDonacion,
     resumenTrueque,
-    pruebaConcepto
+    
 }

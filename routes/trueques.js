@@ -3,7 +3,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 
-const { crearTrueque, agregarCliente, agregarPremium, agregarSegunda, agregarDescuento, agregarReciclaje, resumenTrueque, agregarDonacion, pruebaConcepto } = require('../controllers/trueques');
+const { crearTrueque, agregarCliente, agregarPremium, agregarSegunda, agregarDescuento, agregarReciclaje, resumenTrueque, agregarDonacion } = require('../controllers/trueques');
 
 const router = Router();
 
@@ -19,8 +19,6 @@ router.post('/agregarSegunda', agregarSegunda );
 router.post('/agregarDescuento', agregarDescuento);
 
 router.post('/agregarReciclaje', agregarReciclaje);
-
-router.get('/pruebaConcepto', pruebaConcepto)
 
 router.post('/agregarDonacion', agregarDonacion)
 
