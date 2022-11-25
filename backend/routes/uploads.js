@@ -11,10 +11,16 @@ const { cargarTablaDePuntos,
      cargarTablaDescuentos,
      cargarTablaDonacion,
      borrarTodoDescuento,
-     borrarTodoDonacion  } = require('../controllers/uploads');
+     borrarTodoDonacion,  
+     subirTablaPremium,
+     subirTablaSegunda} = require('../controllers/uploads');
 
 
 router.post( '/', cargarArchivo );
+
+router.post('/subirTablaSegunda', subirTablaSegunda );
+
+router.post( '/subirTablaPremium', subirTablaPremium );
 
 router.post( '/cargarTablaDePuntos', cargarTablaDePuntos );
 

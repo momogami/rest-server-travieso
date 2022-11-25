@@ -1,5 +1,6 @@
 
 const PremiumUnitario = require('../models/premiumUnitario');
+const Detalle         = require('../models/detalle')
 
 //Recibe los datos de la Conversión de Excel a Json
 const generarPremium = ( datos = '' ) => {
@@ -22,11 +23,9 @@ const generarPremium = ( datos = '' ) => {
 
             /* console.log(realg4life) */
             const {talla, puntos, ropa} = realg4life
-            const premiumUnitario = new PremiumUnitario({talla, puntos, ropa})
-            premiumUnitario.save()
+            const detalle = new Detalle({tipoRopa: 'PREMIUM', talla: talla, puntos: puntos, ropa: ropa, deuda: null, })
+            detalle.save()
             
-
-
         }
     });
     
