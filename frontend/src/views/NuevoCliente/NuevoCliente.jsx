@@ -2,7 +2,6 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -12,7 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme();
 
-export default function SignUp() {
+export default function NuevoCliente() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -34,20 +33,19 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-
           <Typography component="h1" variant="h5">
-            Sign up
+            Nuevo Cliente
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="nombre"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="nombre"
+                  label="Nombre"
                   autoFocus
                 />
               </Grid>
@@ -55,9 +53,9 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
+                  id="apellido"
+                  label="Apellido"
+                  name="apellido"
                   autoComplete="family-name"
                 />
               </Grid>
@@ -66,7 +64,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="email"
                   name="email"
                   autoComplete="email"
                 />
@@ -75,12 +73,25 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
+                  name="celular"
+                  label="Celular"
+                  type="celular"
+                  id="celular"
+                  autoComplete="celular"
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="rut"
+                  label="Rut"
+                  type="rut"
+                  id="rut"
+                  autoComplete="rut"
+                />
+              </Grid>
+              <Grid item xs={12}>
               </Grid>
             </Grid>
             <Button
@@ -93,9 +104,6 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
               </Grid>
             </Grid>
           </Box>

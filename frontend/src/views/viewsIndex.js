@@ -3,6 +3,8 @@ import IniciarSesion from "../views/InicioSesion/InicioSesion";
 import Registrarse from "../views/Registrarse/Registrarse";
 import Menu from "../views/Menu/Menu";
 import HistorialTrueques from "../views/HistorialTrueques/HistorialTrueques"
+import NuevoCliente from "./NuevoCliente/NuevoCliente"
+
 // import Cargando from "@views/Cargando/Cargando";
 
 const Screens = {
@@ -23,7 +25,11 @@ const Screens = {
     HistorialTrueques: {
         direccion: "/historialTrueques",
         componente: HistorialTrueques
-    }
+    },
+    NuevoCliente: {
+        direccion: "/nuevoCliente",
+        componente: NuevoCliente
+    },
   },
 };
 
