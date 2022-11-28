@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 
 const columns = [
-  { field: 'nombreCompleto', headerName: 'Nombre completo', width: 130 },
+  { field: 'nombreCompleto', headerName: 'Nombre completo', width: 180 },
   { field: 'rut', headerName: 'Rut', width: 130 },
 
   { field: 'descuento', 
@@ -29,16 +29,11 @@ const columns = [
 ];
 
 const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-  { id: 10, lastName: 'Felipe', firstName: 'Camiroaga', age: 65 },
+  { id: '38123901280', nombreCompleto: 'Camilo Sesto', rut: '201646634', descuento: 30, deuda: 990, puntos: 10000 },
+  { id: '3211312sd11', nombreCompleto: 'Victor el Scrum', rut: '574653391', descuento: 42, deuda: 1800, puntos: 3127 },
+  { id: 'dsad87a8jda', nombreCompleto: 'Manuela Distemper', rut: '201756643', descuento: 45, deuda: 3500, puntos: 3213 },
+  { id: 'dashdsa87d9', nombreCompleto: 'Kike Morande', rut: '1064355486', descuento: 16, deuda: 3450, puntos: 21312 },
+  
 ];
 
 export default function DataTable() {
