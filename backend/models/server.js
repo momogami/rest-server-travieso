@@ -19,7 +19,7 @@ class Server {
         premiumUnitarios:         '/api/premiumUnitarios',
         trueques:                 '/api/trueques' , 
         reciclajeUnitarios:       '/api/reciclajeUnitarios',
-        detalles:                 'api/detalles'    
+        detalles:                '/api/detalles' 
         }
         // Conectar a base de datos
         this.conectarDB();
@@ -64,7 +64,7 @@ class Server {
        this.app.use( this.paths.premiumUnitarios, require('../routes/premiumUnitarios'));
        this.app.use( this.paths.trueques, require('../routes/trueques'));
        this.app.use( this.paths.reciclajeUnitarios, require('../routes/reciclajeUnitarios'));
-       this.app.use( this.paths.detalles, require('../routes/detalles'))
+       this.app.use( this.paths.detalles, require('../routes/detalles'));
     }
 
     listen() {

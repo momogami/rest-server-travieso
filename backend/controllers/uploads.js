@@ -83,6 +83,50 @@ const cargarTablaDescuentos = async( req = request, res = response) => {
     })
 }
 
+//refactor
+const cargarTablaDonacion = async( req = request, res = response) => {
+    const detalles = await Detalle.find({ tipoRopa: 'DONACION' })
+    const vacio = await Object.entries(detalles).length === 0;
+
+    //revisa si la colección esta vacia
+    if ( vacio == false ) {
+        res.status(400).json({ msg: 'La colección de descuentos ya esta existe'})
+        return;
+    }
+
+    // Subida de Archivo a Upload y obtención del Path de este archivo
+    const resolve = await subirArchivo( req.files )
+
+    // Lectura del Archivo
+    const excel = XLSX.readFile( resolve.uploadPath );
+    const datosDescuento = XLSX.utils.sheet_to_json(excel.Sheets['Descuento'])
+   
+
+    datosDescuento.forEach(datoDescuento => {
+    
+    console.log(datoDescuento)
+
+    const realg4life = {
+        ropa: datoDescuento.Prenda,
+    }
+
+    
+    const { ropa } = realg4life
+
+    const detalle = new Detalle({ tipoRopa: 'DESCUENTO', ropa: ropa, talla: null, puntos: null, deuda: null })
+
+    /* const descuentoUnitario = new DescuentoUnitario({ ropa }) */
+    detalle.save()
+
+    
+});
+    await fs.unlinkSync(resolve.uploadPath)
+
+    res.json({
+        msg: 'funca'
+    })  
+}
+
 const subirTablaSegunda = async( req = request, res = response ) => {
     const detalles = await Detalle.find({ tipoRopa: 'SEGUNDA' })
     const vacio = await Object.entries(detalles).length === 0;
@@ -107,7 +151,7 @@ const subirTablaSegunda = async( req = request, res = response ) => {
     res.json({  msg: 'funca'})
 }
 
-const cargarTablaDonacion = async( req = request, res = response) => {
+/* const cargarTablaDonacion = async( req = request, res = response) => {
     const donacionVacia = await coleccionVacia('Donacion');
 
     if( donacionVacia.existenDatos == false ){
@@ -138,7 +182,7 @@ const cargarTablaDonacion = async( req = request, res = response) => {
     res.json({
         msg: 'funca'
     })
-}
+} */
 
 const cargarTablaDePuntos = async(req = request, res = response) => {
     const premiumVacia = await coleccionVacia( 'Premium');
