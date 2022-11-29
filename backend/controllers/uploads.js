@@ -16,8 +16,9 @@ const DonacionUnitario  = require('../models/donaciónUnitario');
 
 //refactor
 const subirTablaPremium = async( req = request, res = response) => {
-    const detalles = await Detalle.find({ tipoRopa: 'PREMIUM' })
-    const vacio = await Object.entries(detalles).length === 0;
+
+    const premiums = await Detalle.find({tipoRopa: 'PREMIUM'});
+    const vacio = Object.entries(premiums).length === 0;
 
     //revisa si la colección esta vacia
     if ( vacio == false ) {
@@ -41,8 +42,9 @@ const subirTablaPremium = async( req = request, res = response) => {
 
 //refactor
 const cargarTablaDescuentos = async( req = request, res = response) => {
-    const detalles = await Detalle.find({ tipoRopa: 'DESCUENTO' })
-    const vacio = await Object.entries(detalles).length === 0;
+
+    const descuentos = await Detalle.find({tipoRopa: 'DESCUENTO'})
+    const vacio = Object.entries(descuentos).length === 0;
 
     //revisa si la colección esta vacia
     if ( vacio == false ) {
@@ -60,7 +62,6 @@ const cargarTablaDescuentos = async( req = request, res = response) => {
 
     datosDescuento.forEach(datoDescuento => {
     
-    console.log(datoDescuento)
 
     const realg4life = {
         ropa: datoDescuento.Prenda,
@@ -85,12 +86,11 @@ const cargarTablaDescuentos = async( req = request, res = response) => {
 
 //refactor
 const cargarTablaDonacion = async( req = request, res = response) => {
-    const detalles = await Detalle.find({ tipoRopa: 'DONACION' })
-    const vacio = await Object.entries(detalles).length === 0;
-
+    const donaciones = await Detalle.find({tipoRopa:'DONACION'})
+    const vacio = Object.entries(donaciones).length === 0;
     //revisa si la colección esta vacia
     if ( vacio == false ) {
-        res.status(400).json({ msg: 'La colección de descuentos ya esta existe'})
+        res.status(400).json({ msg: 'La colección de donación ya esta existe'})
         return;
     }
 
@@ -99,12 +99,11 @@ const cargarTablaDonacion = async( req = request, res = response) => {
 
     // Lectura del Archivo
     const excel = XLSX.readFile( resolve.uploadPath );
-    const datosDescuento = XLSX.utils.sheet_to_json(excel.Sheets['Descuento'])
+    const datosDescuento = XLSX.utils.sheet_to_json(excel.Sheets['Donacion'])
    
 
     datosDescuento.forEach(datoDescuento => {
     
-    console.log(datoDescuento)
 
     const realg4life = {
         ropa: datoDescuento.Prenda,
@@ -113,7 +112,7 @@ const cargarTablaDonacion = async( req = request, res = response) => {
     
     const { ropa } = realg4life
 
-    const detalle = new Detalle({ tipoRopa: 'DESCUENTO', ropa: ropa, talla: null, puntos: null, deuda: null })
+    const detalle = new Detalle({ tipoRopa: 'DONACION', ropa: ropa, talla: null, puntos: null, deuda: null })
 
     /* const descuentoUnitario = new DescuentoUnitario({ ropa }) */
     detalle.save()
@@ -127,62 +126,46 @@ const cargarTablaDonacion = async( req = request, res = response) => {
     })  
 }
 
+//refactor
 const subirTablaSegunda = async( req = request, res = response ) => {
-    const detalles = await Detalle.find({ tipoRopa: 'SEGUNDA' })
-    const vacio = await Object.entries(detalles).length === 0;
-
+    
+    const segundas = await Detalle.find({tipoRopa:'SEGUNDA'})
+    const vacio = Object.entries(segundas).length === 0;
+    
     //revisa si la colección esta vacia
     if ( vacio == false ) {
-        res.status(400).json({ msg: 'La colección de premium ya esta existe'})
+        res.status(400).json({ msg: 'La colección de donación ya esta existe'})
         return;
     }
-
+    
     // Subida de Archivo a Upload y obtención del Path de este archivo
     const resolve = await subirArchivo( req.files )
-    
+
     // Lectura del Archivo
     const excel = XLSX.readFile( resolve.uploadPath );
     const datosSegunda = XLSX.utils.sheet_to_json(excel.Sheets['Segunda'])
 
-    await generarSegunda( datosSegunda )
+    datosSegunda.forEach(datoSegunda => {
+    
+
+        const realg4life = {
+            ropa: datoSegunda.Prenda,
+        }
+        
+        
+        const { ropa } = realg4life
+    
+        const detalle = new Detalle({ tipoRopa: 'SEGUNDA', ropa: ropa, talla: null, puntos: null, deuda: null })
+    
+        detalle.save()
+    
+        
+    });
 
     await fs.unlinkSync(resolve.uploadPath)
 
-    res.json({  msg: 'funca'})
+    res.json({  msg: 'Tabla Segunda lista'})
 }
-
-/* const cargarTablaDonacion = async( req = request, res = response) => {
-    const donacionVacia = await coleccionVacia('Donacion');
-
-    if( donacionVacia.existenDatos == false ){
-        res.status(400).json({ msg: 'Ya hay datos Creados' });
-        return;
-    }
-
-    // Subida de Archivo a Upload y obtención del Path de este archivo
-    const resolve = await subirArchivo( req.files )
-
-    // Lectura del Archivo
-    const excel = XLSX.readFile( resolve.uploadPath );
-    const datosDonacion = XLSX.utils.sheet_to_json(excel.Sheets['Donacion'])
-   
-
-    datosDonacion.forEach(datoDonacion => {
-    
-    const realg4life = {
-        ropa: datoDonacion.Prenda,
-    }
-    
-    const { ropa } = realg4life
-    const donacionUnitario = new DonacionUnitario({ ropa })
-    donacionUnitario.save()
-});
-    await fs.unlinkSync(resolve.uploadPath)
-
-    res.json({
-        msg: 'funca'
-    })
-} */
 
 const cargarTablaDePuntos = async(req = request, res = response) => {
     const premiumVacia = await coleccionVacia( 'Premium');
@@ -280,14 +263,16 @@ const cargarArchivo = async( req, res = response) => {
 }
 
 const borrarTodoPremium = async(req = request, res = response) => {
-    const premiumVacia = await coleccionVacia('Premium');
+    const premium = await Detalle.find({ tipoRopa: 'PREMIUM' })
     
-    if( premiumVacia.existenDatos == true ){
+    if ( !premium ) {
         res.status(400).json({ msg: 'No hay una base de datos para borrar' });
         return;
     }
+    
     //Borra la colleción Premium
-    PremiumUnitario.collection.drop();
+    /* await Detalle.collection.drop({tipoRopa: 'PREMIUM'}); */
+    await Detalle.collection.deleteMany({tipoRopa: 'PREMIUM'})
     //Mensaje de Salida
     res.json({
         msg: 'Los datos de toda las categorias fueron borrados'
@@ -322,9 +307,7 @@ const borrarTodoDescuento = async(req = request, res = response) => {
         return;
     }
     
-    detalles.forEach( async detalle => {
-       await Detalle.findByIdAndDelete( detalle._id )
-    });
+    Detalle.collection.deleteMany({tipoRopa: 'DESCUENTO'})
 
     res.json({
         msg: 'Los datos Descuento fueron borrados'
@@ -340,7 +323,7 @@ const borrarTodoDonacion = async(req = request, res = response) => {
         return;
     }
     //Borra la colleción Premium
-    DonacionUnitario.collection.drop();
+    Detalle.collection.deleteMany({tipoRopa: 'DONACION'})
     //Mensaje de Salida
     res.json({
         msg: 'Los datos de toda las categorias fueron borrados'
