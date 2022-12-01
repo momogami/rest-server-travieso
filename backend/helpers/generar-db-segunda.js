@@ -1,5 +1,4 @@
 
-const SegundaUnitario = require('../models/segundaUnitario');
 const Detalle         = require('../models/detalle')
 
 const generarSegunda = (datos = '') => {

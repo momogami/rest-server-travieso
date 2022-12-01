@@ -10,10 +10,6 @@ const { subirArchivo } = require('../helpers/subir-archivo');
 
 const Detalle           = require('../models/detalle');
 
-const PremiumUnitario   = require('../models/premiumUnitario');
-const SegundaUnitario   = require('../models/segundaUnitario');
-const DonacionUnitario  = require('../models/donaciónUnitario');
-const { DEFAULT_ECDH_CURVE } = require("tls");
 
 //refactor
 const subirTablaPremium = async( req = request, res = response) => {

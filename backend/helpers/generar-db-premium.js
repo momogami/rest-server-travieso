@@ -1,5 +1,4 @@
 
-const PremiumUnitario = require('../models/premiumUnitario');
 const Detalle         = require('../models/detalle')
 
 //Recibe los datos de la Conversión de Excel a Json
