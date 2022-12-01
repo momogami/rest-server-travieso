@@ -13,6 +13,7 @@ const Detalle           = require('../models/detalle');
 const PremiumUnitario   = require('../models/premiumUnitario');
 const SegundaUnitario   = require('../models/segundaUnitario');
 const DonacionUnitario  = require('../models/donaciónUnitario');
+const { DEFAULT_ECDH_CURVE } = require("tls");
 
 //refactor
 const subirTablaPremium = async( req = request, res = response) => {
@@ -262,16 +263,17 @@ const cargarArchivo = async( req, res = response) => {
     })
 }
 
+//refactorizada
 const borrarTodoPremium = async(req = request, res = response) => {
-    const premium = await Detalle.find({ tipoRopa: 'PREMIUM' })
+    const premiums = await Detalle.find({ tipoRopa: 'PREMIUM' })
+    const vacio = Object.entries(premiums).length === 0;
     
-    if ( !premium ) {
+    if ( vacio == true ) {
         res.status(400).json({ msg: 'No hay una base de datos para borrar' });
         return;
     }
     
     //Borra la colleción Premium
-    /* await Detalle.collection.drop({tipoRopa: 'PREMIUM'}); */
     await Detalle.collection.deleteMany({tipoRopa: 'PREMIUM'})
     //Mensaje de Salida
     res.json({
@@ -280,15 +282,17 @@ const borrarTodoPremium = async(req = request, res = response) => {
 
 }
 
+//refactorizada
 const borrarTodoSegunda = async(req = request, res = response) => {
-    const segundaVacia = await coleccionVacia('Segunda');
+    const segundas = await Detalle.find({ tipoRopa: 'SEGUNDA' })
+    const vacio = Object.entries(segundas).length === 0;
 
-    if( segundaVacia.existenDatos == true ){
+    if( vacio == true ){
         res.status(400).json({ msg: 'No hay una base de datos para borrar' });
         return;
     }
-    //Borra la colleción Premium
-    SegundaUnitario.collection.drop();
+    //Borra la colleción Segunda
+    Detalle.collection.deleteMany({tipoRopa: 'SEGUNDA'})
     //Mensaje de Salida
     res.json({
         msg: 'Los datos de toda las categorias fueron borrados'
@@ -296,6 +300,7 @@ const borrarTodoSegunda = async(req = request, res = response) => {
 
 }
 
+//refactorizada
 const borrarTodoDescuento = async(req = request, res = response) => {
     //Buscar todo los detalles tipo Descuento
     const detalles = await Detalle.find({ tipoRopa: 'DESCUENTO' })
@@ -315,10 +320,12 @@ const borrarTodoDescuento = async(req = request, res = response) => {
 
 }
 
+//refactorizada
 const borrarTodoDonacion = async(req = request, res = response) => {
-    const donacionVacia = await coleccionVacia('Donacion');
+    const donaciones = await Detalle.find({ tipoRopa: 'DONACION' });
+    const vacio = Object.entries(donaciones).length === 0;
 
-    if( donacionVacia.existenDatos == true ){
+    if( vacio == true ){
         res.status(400).json({ msg: 'No hay una base de datos para borrar' });
         return;
     }

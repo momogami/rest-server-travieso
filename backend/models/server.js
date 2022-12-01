@@ -3,6 +3,7 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 
 const { dbConnection } = require('../database/config');
+const truequeCabecera = require('./truequeCabecera');
 
 class Server {
 
@@ -19,7 +20,8 @@ class Server {
         premiumUnitarios:         '/api/premiumUnitarios',
         trueques:                 '/api/trueques' , 
         reciclajeUnitarios:       '/api/reciclajeUnitarios',
-        detalles:                '/api/detalles' 
+        detalles:                 '/api/detalles',
+        truequeCabeceras:          '/api/truequeCabeceras'
         }
         // Conectar a base de datos
         this.conectarDB();
@@ -65,6 +67,7 @@ class Server {
        this.app.use( this.paths.trueques, require('../routes/trueques'));
        this.app.use( this.paths.reciclajeUnitarios, require('../routes/reciclajeUnitarios'));
        this.app.use( this.paths.detalles, require('../routes/detalles'));
+       this.app.use( this.paths.truequeCabeceras, require('../routes/truequeCabeceras'));
     }
 
     listen() {
