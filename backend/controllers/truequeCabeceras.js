@@ -125,21 +125,19 @@ const actualizarConResumen = async (req, res) => {
             console.log(detalle[0].tipoRopa)
 
             if ( detalle[0].tipoRopa == 'RECICLAJE') {
-                TruequeDetalle.deleteMany({_id: "638a35a307841655542ed5cc"})
-                console.log(detalleTrueque)
                 
+                truequeCabecera.idsTruequeDetalle = truequeCabecera.idsTruequeDetalle.filter((item) => item !== detalleTrueque )
+                await TruequeDetalle.findByIdAndDelete(detalleTrueque)
+                console.log()
+            
             }
 
         });
     }
 
-    console.log(truequeCabecera)
+    truequeCabecera.save();
 
-
-
-    res.json({
-        msg: true
-    })
+    res.json(truequeCabecera)
 }
 
 
