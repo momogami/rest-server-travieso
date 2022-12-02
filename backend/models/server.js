@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+const morgan = require('morgan');
 
 const { dbConnection } = require('../database/config');
 
@@ -19,6 +20,9 @@ class Server {
         truequeCabeceras:         '/api/truequeCabeceras',
         truequeDetalles:          '/api/truequeDetalles'   
         }
+
+        this.app.use(morgan('dev'));
+
         // Conectar a base de datos
         this.conectarDB();
 
