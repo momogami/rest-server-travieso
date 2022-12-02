@@ -15,11 +15,9 @@ class Server {
         auth:                     '/api/auth',
         clientes:                 '/api/clientes',
         uploads:                  '/api/uploads',
-        premiums:                 '/api/premiums',
-        premiumUnitarios:         '/api/premiumUnitarios',
-        trueques:                 '/api/trueques' , 
-        reciclajeUnitarios:       '/api/reciclajeUnitarios',
-        detalles:                 'api/detalles'    
+        detalles:                 '/api/detalles',
+        truequeCabeceras:         '/api/truequeCabeceras',
+        truequeDetalles:          '/api/truequeDetalles'   
         }
         // Conectar a base de datos
         this.conectarDB();
@@ -60,11 +58,9 @@ class Server {
        this.app.use( this.paths.usuarios , require('../routes/usuarios'));
        this.app.use( this.paths.clientes , require('../routes/clientes'));
        this.app.use( this.paths.uploads, require('../routes/uploads'));
-       this.app.use( this.paths.premiums, require('../routes/premiums'));
-       this.app.use( this.paths.premiumUnitarios, require('../routes/premiumUnitarios'));
-       this.app.use( this.paths.trueques, require('../routes/trueques'));
-       this.app.use( this.paths.reciclajeUnitarios, require('../routes/reciclajeUnitarios'));
-       this.app.use( this.paths.detalles, require('../routes/detalles'))
+       this.app.use( this.paths.detalles, require('../routes/detalles'));
+       this.app.use( this.paths.truequeCabeceras, require('../routes/truequeCabeceras'));
+       this.app.use( this.paths.truequeDetalles, require('../routes/truequeDetalles'));
     }
 
     listen() {
