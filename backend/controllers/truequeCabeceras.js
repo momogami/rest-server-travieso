@@ -4,7 +4,8 @@ const { mongoose, ISODate } = require('mongoose')
 
 const TruequeCabecera = require('../models/truequeCabecera');
 const Detalle = require('../models/detalle');
-const TruequeDetalle  = require('../models/truequeDetalle')
+const TruequeDetalle  = require('../models/truequeDetalle');
+
 
 const crearTruequeCabecera = async(req, res = response) => {
     const { idUsuario, idCliente, idsTruequeDetalle  } = req.body
@@ -46,6 +47,7 @@ const crearTruequeCabecera = async(req, res = response) => {
 
     let cantidadPremiumSegunda = 0;
     let cantidadRopaDescuento = 0;
+    let estadoReciclaje = false;
 
     for (let index = 0; index < idsTruequeDetalle.length; index++) {
         const element = idsTruequeDetalle[index];
@@ -63,6 +65,9 @@ const crearTruequeCabecera = async(req, res = response) => {
             cantidadRopaDescuento = cantidadRopaDescuento + truequeDetalle[0].cantidad
         }
 
+        if(detalle[0].tipoRopa == 'RECICLAJE'){
+            estadoReciclaje = true
+        }
     }
 
     
@@ -75,7 +80,8 @@ const crearTruequeCabecera = async(req, res = response) => {
         puntosExtra: 0,
         puntosVestuario: puntosTotales,
         deudaReciclaje: deudaTotal,
-        totalPuntos: puntosTotales
+        totalPuntos: puntosTotales,
+        estadoReciclaje: estadoReciclaje
     })
 
 
@@ -103,9 +109,42 @@ const consultaEntreFechas = async( req, res ) => {
     })
 }
 
+const actualizarConResumen = async (req, res) => {
+    const { idTruequeCabecera, resumen } = req.body;
+    
+    const truequeCabecera = await TruequeCabecera.findOne({ _id: idTruequeCabecera })
+
+    truequeCabecera.deudaTotal = resumen.deudaReciclaje;
+    truequeCabecera.descuento = resumen.descuento;
+
+    if( resumen.estadoReciclaje == false ){
+        truequeCabecera.idsTruequeDetalle.forEach( async detalleTrueque => {
+            const truequeDetalle = await TruequeDetalle.find({ _id: detalleTrueque._id })
+            const detalle = await Detalle.find({ _id: truequeDetalle[0].idDetalle })
+
+            console.log(detalle[0].tipoRopa)
+
+            if ( detalle[0].tipoRopa == 'RECICLAJE') {
+                TruequeDetalle.deleteMany({_id: "638a35a307841655542ed5cc"})
+                console.log(detalleTrueque)
+                
+            }
+
+        });
+    }
+
+    console.log(truequeCabecera)
+
+
+
+    res.json({
+        msg: true
+    })
+}
 
 
 module.exports = {
     crearTruequeCabecera,
-    consultaEntreFechas
+    consultaEntreFechas,
+    actualizarConResumen
 }
