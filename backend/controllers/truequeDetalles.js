@@ -102,17 +102,17 @@ const agregarDonacion = async(req = request, res = response) => {
 }
 
 const agregarReciclaje = async(req = request, res = response ) => {
-    const { cantidad } = req.body;
+    const { cantidad, kilos } = req.body;
 
     const detalle =  await Detalle.findOne({ tipoRopa: 'RECICLAJE' })
 
-    const truequeDetalle = new TruequeDetalle({ idDetalle: detalle._id, cantidad: cantidad, puntosIniciales: null, kilos: null, deudaInicial: (cantidad * detalle.deuda)  })
+    const truequeDetalle = new TruequeDetalle({ idDetalle: detalle._id, cantidad: cantidad, puntosIniciales: null, kilos: kilos, deudaInicial: (kilos * detalle.deuda)  })
     
     const resumen = ({
         tipoTrueque: detalle.tipoRopa,
         prenda:  "",
         cantidad: "",
-        deuda: ( cantidad * detalle.deuda ),
+        deuda: (detalle.deuda * kilos),
         puntos: 0
     })
 

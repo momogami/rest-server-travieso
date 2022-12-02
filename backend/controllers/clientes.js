@@ -17,9 +17,19 @@ const clienteGet = async(req = request, res = response) => {
     
     const { rut } = req.body;
     const cliente = await Cliente.findOne( {rut} )
+
+    const vacio = Object.entries(cliente).length === 0;
+
+    if ( vacio == true ) {
+        res.json({
+            estado: false
+        })
+        return
+    }
     
     res.json({
-        cliente
+        idCliente: cliente._id,
+        estado: true
     });
 }
 
