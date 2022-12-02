@@ -25,7 +25,7 @@ const router = Router();
 
 router.get('/', clientesGet );
 
-router.get('/obtenerCliente', clienteGet );
+router.post('/obtenerCliente', clienteGet );
 
 router.put('/', clientesPut);
 

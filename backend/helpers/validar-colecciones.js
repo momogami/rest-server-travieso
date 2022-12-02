@@ -1,47 +1,36 @@
 
-const PremiumUnitario   = require('../models/premiumUnitario');
-const SegundaUnitario   = require('../models/segundaUnitario');
-const DescuentoUnitario = require('../models/descuentoUnitario');
-const DonacionUnitario  = require('../models/donaciónUnitario');
+const Detalle         = require('../models/detalle')
 
-const coleccionVacia = (categoria) => {
-    if (categoria == 'Premium') {
+const coleccionesVacias = async(  ) => {
 
-        return new Promise(async (resolve, reject) => {
-            const objetoPremiumUnitario = await PremiumUnitario.find();
-            const existenDatos = Object.entries(objetoPremiumUnitario).length === 0;
-            resolve({ existenDatos })
-        });
+    // PREMIUM
+    const premiums = await Detalle.find({tipoRopa: 'PREMIUM'});
+    const vacioPremium = Object.entries(premiums).length === 0;
+
+    //SEGUNDA
+    const segundas = await Detalle.find({tipoRopa:'SEGUNDA'})
+    const vacioSegunda = Object.entries(segundas).length === 0;
+
+    //DESCUENTO
+    const descuentos = await Detalle.find({tipoRopa: 'DESCUENTO'}) 
+    const vacioDescuentos = Object.entries(descuentos).length === 0;
+
+    //DONACION
+    const donacion = await Detalle.find({tipoRopa: 'DESCUENTO'})
+    const vacioDonacion = Object.entries(donacion).length === 0;    
+    
+    //RECICLAJE 
+    const reciclaje = await Detalle.find({tipoRopa: 'DESCUENTO'})
+    const vacioReciclaje = Object.entries(reciclaje).length === 0;    
+
+    if( vacioPremium && vacioSegunda && vacioDescuentos && vacioDonacion && vacioReciclaje == true ){
+        return true
     }
 
-    if (categoria == 'Segunda'){
-        return new Promise(async (resolve, reject) => {
-            const objetoSegundaUnitario = await SegundaUnitario.find();
-            const existenDatos = Object.entries(objetoSegundaUnitario).length === 0;
-            resolve({ existenDatos })
-        });
-    }
-
-    if (categoria == 'Descuento'){
-        return new Promise(async (resolve, reject) => {
-            const objetoDescuentoUnitario = await DescuentoUnitario.find();
-            const existenDatos = Object.entries(objetoDescuentoUnitario).length === 0;
-            resolve({ existenDatos })
-        });
-    }
-
-    if (categoria == 'Donacion'){
-        return new Promise(async (resolve, reject) => {
-            const objetoDonacionUnitario = await DonacionUnitario.find();
-            const existenDatos = Object.entries(objetoDonacionUnitario).length === 0;
-            resolve({existenDatos})
-        })
-    }
-
+    return false
 }
 
 
 module.exports = {
-    coleccionVacia
+    coleccionesVacias
 }
-

@@ -3,32 +3,30 @@ const { check } = require('express-validator');
 
 const router = Router();
 
-const { cargarTablaDePuntos,
-     borrarTodoPremium,
-     cargarArchivo,
-     actualizarTablaDePuntos, 
-     borrarTodoSegunda,
-     cargarTablaDescuentos,
-     cargarTablaDonacion,
-     borrarTodoDescuento,
-     borrarTodoDonacion,  
-     subirTablaPremium,
-     subirTablaSegunda} = require('../controllers/uploads');
+const {   borrarTodoDescuento,
+          borrarTodoDonacion, 
+          borrarTodoPremium,
+          borrarTodoSegunda,
+          subirTablaDescuentos,
+          subirTablaDonacion, 
+          subirTablaPremium,
+          subirTablaSegunda,
+          darValorReciclaje,
+          subirTodo,
+          borrarTodo } = require('../controllers/uploads');
 
 
-router.post( '/', cargarArchivo );
-
-router.post('/subirTablaSegunda', subirTablaSegunda );
+router.post( '/subirTablaSegunda', subirTablaSegunda );
 
 router.post( '/subirTablaPremium', subirTablaPremium );
 
-router.post( '/cargarTablaDePuntos', cargarTablaDePuntos );
+router.post( '/subirTablaDescuentos', subirTablaDescuentos );
 
-router.post( '/cargarTablaDescuentos', cargarTablaDescuentos );
+router.post( '/subirTablaDonacion', subirTablaDonacion);
 
-router.post( '/cargarTablaDonacion', cargarTablaDonacion);
+router.post( '/darValorReciclaje', darValorReciclaje);
 
-router.put('/actualizarTablaDePuntos', actualizarTablaDePuntos);
+router.post( '/subirTodo', subirTodo);
 
 router.delete( '/borrarPremium', borrarTodoPremium );
 
@@ -38,6 +36,7 @@ router.delete( '/borrarDescuento', borrarTodoDescuento);
 
 router.delete( '/borrarDonacion', borrarTodoDonacion);
 
+router.delete( '/borrarTodo', borrarTodo)
 
 
 module.exports = router;

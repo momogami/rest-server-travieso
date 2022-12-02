@@ -10,17 +10,17 @@ const TruequeCabeceraSchema = Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "clientes"
     },
-    idTruequeDetalle: [{
+    idsTruequeDetalle: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "truequedetalles"
     }],
     descuento: {
-        type: String,
+        type: Number,
         required: [false]
     },  
     fecha: {
         type: Date,
-        required: [true]
+        required: [true],
     }, 
     puntosTotales: {
         type: Number,
