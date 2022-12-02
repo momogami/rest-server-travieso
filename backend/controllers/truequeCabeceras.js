@@ -2,7 +2,7 @@ const { response, request } = require('express');
 
 const TruequeCabecera = require('../models/truequeCabecera')
 
-const agregarPremium = async(req, res = response) => {
+const crearTruequeCabecera = async(req, res = response) => {
     
     
 
@@ -16,5 +16,5 @@ const agregarPremium = async(req, res = response) => {
 
 
 module.exports = {
-    agregarPremium,
+    crearTruequeCabecera,
 }

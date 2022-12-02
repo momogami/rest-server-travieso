@@ -2,11 +2,11 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { agregarPremium } = require('../controllers/truequeCabeceras');
+const { crearTruequeCabecera } = require('../controllers/truequeCabeceras');
 
 const router = Router();
 
 
-router.post('/agregarPremium', agregarPremium );
+router.post('/crearTruequeCabecera', crearTruequeCabecera );
 
 module.exports = router;

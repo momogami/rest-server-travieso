@@ -154,12 +154,13 @@ const subirTablaSegunda = async( req = request, res = response ) => {
 
         const realg4life = {
             ropa: datoSegunda.Prenda,
+            puntos: datoSegunda.Puntos
         }
         
         
-        const { ropa } = realg4life
+        const { ropa, puntos } = realg4life
     
-        const detalle = new Detalle({ tipoRopa: 'SEGUNDA', ropa: ropa, talla: null, puntos: null, deuda: null })
+        const detalle = new Detalle({ tipoRopa: 'SEGUNDA', ropa: ropa, talla: null, puntos: puntos, deuda: null })
     
         detalle.save()
     

@@ -16,7 +16,8 @@ class Server {
         clientes:                 '/api/clientes',
         uploads:                  '/api/uploads',
         detalles:                 '/api/detalles',
-        truequeCabeceras:          '/api/truequeCabeceras'
+        truequeCabeceras:         '/api/truequeCabeceras',
+        truequeDetalles:          '/api/truequeDetalles'   
         }
         // Conectar a base de datos
         this.conectarDB();
@@ -59,6 +60,7 @@ class Server {
        this.app.use( this.paths.uploads, require('../routes/uploads'));
        this.app.use( this.paths.detalles, require('../routes/detalles'));
        this.app.use( this.paths.truequeCabeceras, require('../routes/truequeCabeceras'));
+       this.app.use( this.paths.truequeDetalles, require('../routes/truequeDetalles'));
     }
 
     listen() {
