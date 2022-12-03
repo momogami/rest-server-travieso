@@ -5,6 +5,7 @@ const { mongoose, ISODate } = require('mongoose')
 const TruequeCabecera = require('../models/truequeCabecera');
 const Detalle = require('../models/detalle');
 const TruequeDetalle  = require('../models/truequeDetalle');
+const Cliente = require('../models/cliente');
 
 
 const crearTruequeCabecera = async(req, res = response) => {
@@ -47,7 +48,7 @@ const crearTruequeCabecera = async(req, res = response) => {
 
     let cantidadPremiumSegunda = 0;
     let cantidadRopaDescuento = 0;
-    let estadoReciclaje = false;
+    let estadoReciclaje = true;
 
     for (let index = 0; index < idsTruequeDetalle.length; index++) {
         const element = idsTruequeDetalle[index];
@@ -126,16 +127,80 @@ const consultaEntreFechas = async( req, res ) => {
     
     const { fechaInicio, fechaFin } = req.body
 
-    const fechas = await TruequeCabecera.find({fecha: {$gte: new Date(fechaInicio), $lte: new Date(fechaFin)}}
+    const historialCompleto = [];
+
+    const trueques = await TruequeCabecera.find({fecha: {$gte: new Date(fechaInicio), $lte: new Date(fechaFin)}}
     )
 
-    fechas.forEach(fecha => {
-        console.log(fecha.fecha)
-    });
+    for (let index = 0; index < trueques.length; index++) {
+        // Obtencion Cliente
+        const cliente = await Cliente.findOne(trueques[index].idCliente)
 
-    res.json({
-        msg: 'funca'
-    })
+        //Obtener Trueque Detalle 
+        let premiumFinal = [];
+        let segundaFinal = [];
+        let descuentoFinal = [];
+        let donacionFinal = [];
+        for (let index2 = 0; index2 < trueques[index].idsTruequeDetalle.length; index2++) {
+            const truequeDetalle = await TruequeDetalle.findOne(trueques[index].idsTruequeDetalle[index2])
+            const detalle = await Detalle.findOne( truequeDetalle.idDetalle )
+
+            if(detalle.tipoRopa == 'PREMIUM'){
+                premiumInicial = ` ${detalle.ropa}/${detalle.talla}: ${truequeDetalle.cantidad}  `
+                premiumFinal.push(premiumInicial)
+            }
+
+            if( detalle.tipoRopa == 'SEGUNDA'){
+                segundaInicial = `${detalle.ropa}: ${truequeDetalle.cantidad}`
+                segundaFinal.push(segundaInicial)
+            }
+
+            if ( detalle.tipoRopa == 'DESCUENTO') {
+                descuentoInicial = `${detalle.ropa}: ${truequeDetalle.cantidad}`
+                descuentoFinal.push(descuentoInicial)
+            }
+
+            if ( detalle.tipoRopa == 'DONACION') {
+                donacionInicial = `${detalle.ropa}: ${truequeDetalle.cantidad}`
+                donacionFinal.push(donacionInicial)
+            }
+
+            if ( detalle.tipoRopa == 'RECICLAJE') {
+                kilosReciclaje = truequeDetalle.kilos;
+                cantidadReciclaje = truequeDetalle.cantidad ;
+                deudaReciclaje = truequeDetalle.deudaInicial ;
+            }
+
+
+        }
+        
+
+        
+
+        let historial = ({
+            ID : trueques[index]._id,
+            NombreCliente: `${cliente.nombre} ${cliente.apellido}`,
+            rut: cliente.rut,
+            puntosTotales: trueques[index].puntosTotales,
+            premium: premiumFinal,
+            segunda: segundaFinal,
+            descuento: descuentoFinal,
+            donacion: donacionFinal,
+            kilos: kilosReciclaje,
+            cantidadReciclaje: cantidadReciclaje,
+            deudaReciclaje: deudaReciclaje  
+        })
+
+        historialCompleto.push( historial )
+        
+        
+    }
+
+    
+    
+    console.log( historialCompleto )
+
+    res.json(historialCompleto)
 }
 
 
