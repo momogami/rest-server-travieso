@@ -124,6 +124,15 @@ const agregarReciclaje = async(req = request, res = response ) => {
     })
 }
 
+const borrarTruequeDetalle = async(req, res) => {
+    const { idTruequeDetalle } = req.body
+    const truequeDetalle = await TruequeDetalle.findByIdAndDelete( idTruequeDetalle )
+
+    res.json({
+        truequeEliminado: truequeDetalle
+    })
+}
+
 
 
 
@@ -132,5 +141,6 @@ module.exports = {
     agregarSegunda,
     agregarDescuento,
     agregarDonacion,
-    agregarReciclaje
+    agregarReciclaje,
+    borrarTruequeDetalle
 }
