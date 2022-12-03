@@ -1,11 +1,10 @@
 const { response, request } = require('express');
-const detalle = require('../models/detalle');
-const { mongoose, ISODate } = require('mongoose')
 
 const TruequeCabecera = require('../models/truequeCabecera');
 const Detalle = require('../models/detalle');
 const TruequeDetalle  = require('../models/truequeDetalle');
 const Cliente = require('../models/cliente');
+
 
 
 const crearTruequeCabecera = async(req, res = response) => {
@@ -48,7 +47,7 @@ const crearTruequeCabecera = async(req, res = response) => {
 
     let cantidadPremiumSegunda = 0;
     let cantidadRopaDescuento = 0;
-    let estadoReciclaje = true;
+    let estadoReciclaje = null;
 
     for (let index = 0; index < idsTruequeDetalle.length; index++) {
         const element = idsTruequeDetalle[index];
@@ -131,7 +130,7 @@ const consultaEntreFechas = async( req, res ) => {
 
     const trueques = await TruequeCabecera.find({fecha: {$gte: new Date(fechaInicio), $lte: new Date(fechaFin)}}
     )
-
+    
     for (let index = 0; index < trueques.length; index++) {
         // Obtencion Cliente
         const cliente = await Cliente.findOne(trueques[index].idCliente)
@@ -141,6 +140,7 @@ const consultaEntreFechas = async( req, res ) => {
         let segundaFinal = [];
         let descuentoFinal = [];
         let donacionFinal = [];
+        let cantidadTotal = 0;
         for (let index2 = 0; index2 < trueques[index].idsTruequeDetalle.length; index2++) {
             const truequeDetalle = await TruequeDetalle.findOne(trueques[index].idsTruequeDetalle[index2])
             const detalle = await Detalle.findOne( truequeDetalle.idDetalle )
@@ -148,21 +148,25 @@ const consultaEntreFechas = async( req, res ) => {
             if(detalle.tipoRopa == 'PREMIUM'){
                 premiumInicial = ` ${detalle.ropa}/${detalle.talla}: ${truequeDetalle.cantidad}  `
                 premiumFinal.push(premiumInicial)
+                cantidadTotal = cantidadTotal + truequeDetalle.cantidad
             }
 
             if( detalle.tipoRopa == 'SEGUNDA'){
                 segundaInicial = `${detalle.ropa}: ${truequeDetalle.cantidad}`
                 segundaFinal.push(segundaInicial)
+                cantidadTotal = cantidadTotal + truequeDetalle.cantidad
             }
 
             if ( detalle.tipoRopa == 'DESCUENTO') {
                 descuentoInicial = `${detalle.ropa}: ${truequeDetalle.cantidad}`
                 descuentoFinal.push(descuentoInicial)
+                cantidadTotal = cantidadTotal + truequeDetalle.cantidad
             }
 
             if ( detalle.tipoRopa == 'DONACION') {
                 donacionInicial = `${detalle.ropa}: ${truequeDetalle.cantidad}`
                 donacionFinal.push(donacionInicial)
+                cantidadTotal = cantidadTotal + truequeDetalle.cantidad
             }
 
             if ( detalle.tipoRopa == 'RECICLAJE') {
@@ -188,7 +192,9 @@ const consultaEntreFechas = async( req, res ) => {
             donacion: donacionFinal,
             kilos: kilosReciclaje,
             cantidadReciclaje: cantidadReciclaje,
-            deudaReciclaje: deudaReciclaje  
+            deudaReciclaje: deudaReciclaje,
+            cantidadTotal: cantidadTotal
+
         })
 
         historialCompleto.push( historial )
@@ -203,9 +209,39 @@ const consultaEntreFechas = async( req, res ) => {
     res.json(historialCompleto)
 }
 
+const historialTrueques = async( req, res) => {
+    const truequeCabecera = await TruequeCabecera.find();
+    
+    const historialCompleto = []
+
+    for (let index = 0; index < truequeCabecera.length; index++) {
+        //Cliente
+        const cliente = await Cliente.findById( truequeCabecera[index].idCliente )
+        
+        //DESCUENTO
+
+        
+
+        const historial = ({
+            nombrecliente: `${cliente.nombre} ${cliente.apellido}`,
+            rut: cliente.rut,
+            descuento: truequeCabecera[index].descuento,
+            reciclaje: truequeCabecera[index].deudaTotal,
+            puntos: truequeCabecera[index].puntosTotales
+
+        })
+
+        historialCompleto.push(historial)
+
+    }
+
+    res.json(historialCompleto)
+}
+
 
 module.exports = {
     crearTruequeCabecera,
     consultaEntreFechas,
-    actualizarConResumen
+    actualizarConResumen,
+    historialTrueques
 }
