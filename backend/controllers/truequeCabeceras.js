@@ -129,13 +129,17 @@ const consultaEntreFechas = async( req, res ) => {
     const { fechaInicio, fechaFin } = req.body
 
     const historialCompleto = [];
-
+    
     const trueques = await TruequeCabecera.find({fecha: {$gte: new Date(fechaInicio), $lte: new Date(fechaFin)}}
     )
+
     
+    let valorDescueto = 0
     for (let index = 0; index < trueques.length; index++) {
         // Obtencion Cliente
         const cliente = await Cliente.findOne(trueques[index].idCliente)
+
+        valorDescueto = valorDescueto + trueques[index].descuento
 
         //Obtener Trueque Detalle 
         let premiumFinal = [];
@@ -146,6 +150,7 @@ const consultaEntreFechas = async( req, res ) => {
         let kilosReciclaje = 0;
         let cantidadReciclaje = 0;
         let deudaReciclaje = 0;
+        
 
         for (let index2 = 0; index2 < trueques[index].idsTruequeDetalle.length; index2++) {
             const truequeDetalle = await TruequeDetalle.findOne(trueques[index].idsTruequeDetalle[index2])
@@ -196,10 +201,11 @@ const consultaEntreFechas = async( req, res ) => {
             segunda: segundaFinal,
             descuento: descuentoFinal,
             donacion: donacionFinal,
-            kilos: kilosReciclaje,
+            valorDescueto: valorDescueto,
+            kilosConDeuda: `kilos: ${kilosReciclaje} deuda: ${deudaReciclaje}` ,
             cantidadReciclaje: cantidadReciclaje,
             deudaReciclaje: deudaReciclaje,
-            cantidadTotal: cantidadTotal
+            
 
         })
 
