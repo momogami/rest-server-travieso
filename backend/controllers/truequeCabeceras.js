@@ -4,6 +4,8 @@ const TruequeCabecera = require('../models/truequeCabecera');
 const Detalle = require('../models/detalle');
 const TruequeDetalle  = require('../models/truequeDetalle');
 const Cliente = require('../models/cliente');
+const { contextsKey } = require('express-validator/src/base');
+const Usuario = require('../models/usuario');
 
 
 
@@ -139,7 +141,11 @@ const consultaEntreFechas = async( req, res ) => {
         // Obtencion Cliente
         const cliente = await Cliente.findOne(trueques[index].idCliente)
 
+        const usuario = await Usuario.findOne(trueques[index].idUsuario)
+        
         valorDescueto = valorDescueto + trueques[index].descuento
+
+
 
         //Obtener Trueque Detalle 
         let premiumFinal = [];
@@ -196,6 +202,7 @@ const consultaEntreFechas = async( req, res ) => {
             ID : trueques[index]._id,
             NombreCliente: `${cliente.nombre} ${cliente.apellido}`,
             rut: cliente.rut,
+            nombreTrabajador: usuario.nombreCompleto,
             puntosTotales: trueques[index].puntosTotales,
             premium: premiumFinal,
             segunda: segundaFinal,
