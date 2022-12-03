@@ -115,6 +115,8 @@ const actualizarConResumen = async (req, res) => {
             }
 
         });
+
+
     }
 
     truequeCabecera.save();
@@ -141,6 +143,10 @@ const consultaEntreFechas = async( req, res ) => {
         let descuentoFinal = [];
         let donacionFinal = [];
         let cantidadTotal = 0;
+        let kilosReciclaje = 0;
+        let cantidadReciclaje = 0;
+        let deudaReciclaje = 0;
+
         for (let index2 = 0; index2 < trueques[index].idsTruequeDetalle.length; index2++) {
             const truequeDetalle = await TruequeDetalle.findOne(trueques[index].idsTruequeDetalle[index2])
             const detalle = await Detalle.findOne( truequeDetalle.idDetalle )
