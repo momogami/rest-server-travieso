@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Container } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 
 const columns = [
@@ -39,7 +38,6 @@ const rows = [
 export default function DataTable() {
   return (
     <Container component="main" maxWidth="xs">
-        <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
