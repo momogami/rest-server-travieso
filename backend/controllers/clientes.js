@@ -40,9 +40,7 @@ const clientesPost = async(req = request, res = response) => {
     // Guardar en BD
     await cliente.save();
 
-    res.json({
-        cliente
-    });
+    res.json(cliente._id);
 }
 
 const clientesPut = async(req = request, res = response) => {

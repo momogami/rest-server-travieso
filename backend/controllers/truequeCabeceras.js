@@ -202,10 +202,6 @@ const consultaEntreFechas = async( req, res ) => {
         
     }
 
-    
-    
-    console.log( historialCompleto )
-
     res.json(historialCompleto)
 }
 
