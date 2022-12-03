@@ -120,7 +120,7 @@ const agregarReciclaje = async(req = request, res = response ) => {
 
     res.json({
         truequeDetalle: truequeDetalle._id,
-        resumen:        [resumen]
+        resumen:        resumen
     })
 }
 
