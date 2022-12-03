@@ -136,14 +136,14 @@ const consultaEntreFechas = async( req, res ) => {
     )
 
     
-    let valorDescueto = 0
+    let valorDescuento = 0
     for (let index = 0; index < trueques.length; index++) {
         // Obtencion Cliente
         const cliente = await Cliente.findOne(trueques[index].idCliente)
 
         const usuario = await Usuario.findOne(trueques[index].idUsuario)
         
-        valorDescueto = valorDescueto + trueques[index].descuento
+        valorDescuento = valorDescuento + trueques[index].descuento
 
 
 
@@ -208,10 +208,11 @@ const consultaEntreFechas = async( req, res ) => {
             segunda: segundaFinal,
             descuento: descuentoFinal,
             donacion: donacionFinal,
-            valorDescueto: valorDescueto,
+            valorDescuento: valorDescuento,
             kilosConDeuda: `kilos: ${kilosReciclaje} deuda: ${deudaReciclaje}` ,
             cantidadReciclaje: cantidadReciclaje,
             deudaReciclaje: deudaReciclaje,
+            cantidadTotal: cantidadTotal
             
 
         })
