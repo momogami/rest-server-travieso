@@ -1,61 +1,95 @@
-import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { Container } from '@mui/material';
-import Box from '@mui/material/Box';
+import React, { useState, useEffect } from "react";
+import { Box, Button, Paper, Table, TableContainer, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
 
-const columns = [
-  { field: 'nombreCompleto', headerName: 'Nombre completo', width: 180 },
-  { field: 'rut', headerName: 'Rut', width: 130 },
+import { useNavigate } from "react-router-dom";
 
-  { field: 'descuento', 
-    headerName: 'Descuento', 
-    type: 'number',
-    width: 90 
-  },
+import { historialTrueques, consultaEntreFechas } from "../../services/services";
+import FloatingCard from "../../components/ui/FloatingCard";
+import FechasDialog from "../../components/dialogs/FechasDialog";
 
-  {
-    field: 'deuda',
-    headerName: 'Deuda',
-    type: 'number',
-    width: 90,
-  },
-  {
-    field: 'puntos',
-    headerName: 'Puntos',
-    type: 'number',
-    width: 90,
-  },
-];
+const HistorialTrueques = () => {
+  const navigate = useNavigate();
+  const [trueques, setTrueques] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
 
-const rows = [
-  { id: '38123901280', nombreCompleto: 'Camilo Sesto', rut: '201646634', descuento: 30, deuda: 990, puntos: 10000 },
-  { id: '3211312sd11', nombreCompleto: 'Victor el Scrum', rut: '574653391', descuento: 42, deuda: 1800, puntos: 3127 },
-  { id: 'dsad87a8jda', nombreCompleto: 'Manuela Distemper', rut: '201756643', descuento: 45, deuda: 3500, puntos: 3213 },
-  { id: 'dashdsa87d9', nombreCompleto: 'Kike Morande', rut: '1064355486', descuento: 16, deuda: 3450, puntos: 21312 },
-  
-];
+  useEffect(() => {
+    fetchHistorial();
+  }, [])
 
-export default function DataTable() {
+  const fetchHistorial = async () => {
+    const response = await historialTrueques();
+    setTrueques(response.data);
+  };
+
+  const onClickFiltroFechas = () => setOpenDialog(true);
+
+  const onClickAtras = () => {
+    navigate('/menu');
+  };
+
+  const buildTable = () => {
+    return (
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Nombre completo</TableCell>
+              <TableCell>Rut</TableCell>
+              <TableCell>Descuento</TableCell>
+              <TableCell>Reciclaje</TableCell>
+              <TableCell>Puntos totales</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {trueques.map((trueque) => {
+              return (
+                <TableRow
+                  key={`${trueque.nombreCliente}-${trueque.puntos}`}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">{trueque.nombrecliente}</TableCell>
+                  <TableCell>{trueque.rut}</TableCell>
+                  <TableCell>{trueque.descuento}</TableCell>
+                  <TableCell>{trueque.reciclaje}</TableCell>
+                  <TableCell>{trueque.puntos}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  };
+
   return (
-    <Container component="main" maxWidth="xs">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-        <div style={{ height: 400, width: '200%' }}>
-        <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            checkboxSelection
+    <FloatingCard title="Historial de trueques" sx={{ width: 'fit-content' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Button variant="contained" onClick={onClickFiltroFechas}>Generar historial entre fechas</Button>
+        </Box>
+        {buildTable()}
+        <Box sx={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
+          <Button sx={{ flex: 1 }} variant="contained" onClick={onClickAtras}>Atrás</Button>
+        </Box>
+      </Box>
+
+      <FechasDialog
+        isOpen={openDialog}
+        onClose={() => setOpenDialog(false)}
+        onError={(error) => {
+          setOpenDialog(false);
+          console.log(error);
+        }}
+        onSuccess={async (from, till) => {
+          setOpenDialog(false);
+          const response = await consultaEntreFechas({ fechaInicio: from, fechaFin: till });
+          navigate('/historialEntreFechas', {
+            state: {trueques: response.data},
+          });
+        }}
       />
-    </div>
-    </Box>
-    </Container>
+    </FloatingCard>
   );
-}
+};
+
+export default HistorialTrueques;

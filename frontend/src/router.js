@@ -11,6 +11,8 @@ import Menu from "./views/menu";
 import HistorialTrueques from "./views/historialTrueques";
 import NuevoCliente from "./views/nuevoCliente";
 import NuevoTrueque from "./views/nuevoTrueque";
+import ResumenTrueque from "./views/resumenTrueque";
+import HistorialEntreFechas from "./views/historialEntreFechas";
 
 const screens = {
   invitado: {
@@ -39,6 +41,14 @@ const screens = {
     NuevoTrueque: {
       direccion: "/nuevoTrueque",
       componente: NuevoTrueque,
+    },
+    ResumenTrueque: {
+      direccion: "/resumenTrueque",
+      componente: ResumenTrueque,
+    },
+    HistorialEntreFechas: {
+      direccion: "/historialEntreFechas",
+      componente: HistorialEntreFechas,
     },
   },
 };

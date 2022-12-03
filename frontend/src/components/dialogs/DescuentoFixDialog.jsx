@@ -3,22 +3,21 @@ import {
   Dialog,
   DialogActions,
   Box,
-  TextField,
   Divider,
   Typography,
   Button,
+  TextField,
 } from "@mui/material";
-import { obtenerCliente } from "../../services/services";
 
-const RutClienteDialog = ({ isOpen, onClose, onError, onSuccess }) => {
-  const [rut, setRut] = useState("");
+const DescuentoFixDialog = ({ isOpen, onClose, onError, onSuccess }) => {
+
+  const [descuento, setDescuento] = useState(0);
+
   const onSubmit = async () => {
-    const response = await obtenerCliente(rut);
-    onSuccess(response.data.idCliente);
+    onSuccess(descuento);
   };
 
   const handleClose = () => {
-    setRut("");
     onClose();
   };
 
@@ -37,16 +36,19 @@ const RutClienteDialog = ({ isOpen, onClose, onError, onSuccess }) => {
           padding: "20px",
         }}
       >
-        <Typography>Ingrese el rut del cliente</Typography>
+        <Typography>Descuento</Typography>
+
         <TextField
-          label="Rut"
+          label="Descuento"
           variant="filled"
-          value={rut}
+          type='number'
+          value={descuento}
           onChange={(event) => {
             const newValue = event.target.value;
-            setRut(newValue);
+            setDescuento(newValue);
           }}
         />
+
         <Divider sx={{ paddingTop: "10px" }} />
         <Box sx={{ padding: "10px 0px" }}>
           <DialogActions>
@@ -63,4 +65,4 @@ const RutClienteDialog = ({ isOpen, onClose, onError, onSuccess }) => {
   );
 };
 
-export default RutClienteDialog;
+export default DescuentoFixDialog;

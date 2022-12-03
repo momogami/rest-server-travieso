@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Container, Box, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import RutClienteDialog from "../../components/dialogs/RutClienteDialog";
+import FloatingCard from "../../components/ui/FloatingCard";
 
 export default function Menu() {
   const navigate = useNavigate();
@@ -20,17 +21,16 @@ export default function Menu() {
   };
 
   // esto se ejecuta al confirmar en el dialog
-  const handleDialogOnSuccess = (cliente) => {
-    console.log({ cliente });
-    if(cliente) {
-      navigate('/NuevoTrueque');
+  const handleDialogOnSuccess = (idCliente) => {
+    if (idCliente) {
+      navigate('/nuevoTrueque', { state: { idCliente } });
     } else {
-      navigate('/NuevoCliente', );
+      navigate('/nuevoCliente',);
     }
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <FloatingCard title="Menú principal" sx={{minWidth:'50%'}}>
       <Box
         sx={{
           marginTop: 8,
@@ -55,7 +55,7 @@ export default function Menu() {
           sx={{ mt: 3, mb: 2 }}
           onClick={onClickHistorialTrueque}
         >
-          Hitorial Trueques
+          Historial Trueques
         </Button>
         <Button
           type="submit"
@@ -76,6 +76,6 @@ export default function Menu() {
         }
         onError={() => setOpenDialog(false)}
       />
-    </Container>
+    </FloatingCard>
   );
 }

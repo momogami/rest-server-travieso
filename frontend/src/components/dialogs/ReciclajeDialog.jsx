@@ -3,22 +3,34 @@ import {
   Dialog,
   DialogActions,
   Box,
-  TextField,
   Divider,
   Typography,
   Button,
+  TextField,
 } from "@mui/material";
-import { obtenerCliente } from "../../services/services";
+import { agregarReciclaje } from "../../services/services";
 
-const RutClienteDialog = ({ isOpen, onClose, onError, onSuccess }) => {
-  const [rut, setRut] = useState("");
+const ReciclajeDialog = ({ isOpen, onClose, onError, onSuccess }) => {
+
+  const [cantidad, setCantidad] = useState(1);
+  const [kilos, setKilos] = useState(0);
+
   const onSubmit = async () => {
-    const response = await obtenerCliente(rut);
-    onSuccess(response.data.idCliente);
+    try {
+      const response = await agregarReciclaje({
+        kilos: kilos,
+        cantidad: cantidad,
+      });
+      onSuccess(response.data);
+    } catch (error) {
+      onError(error.message);
+    }
+
   };
 
   const handleClose = () => {
-    setRut("");
+    setCantidad(1);
+    setKilos(0);
     onClose();
   };
 
@@ -37,16 +49,30 @@ const RutClienteDialog = ({ isOpen, onClose, onError, onSuccess }) => {
           padding: "20px",
         }}
       >
-        <Typography>Ingrese el rut del cliente</Typography>
+        <Typography>Reciclaje</Typography>
+
         <TextField
-          label="Rut"
+          label="Cantidad"
           variant="filled"
-          value={rut}
+          type='number'
+          value={cantidad}
           onChange={(event) => {
             const newValue = event.target.value;
-            setRut(newValue);
+            setCantidad(newValue);
           }}
         />
+
+        <TextField
+          label="Kilos"
+          variant="filled"
+          type='number'
+          value={kilos}
+          onChange={(event) => {
+            const newValue = event.target.value;
+            setKilos(newValue);
+          }}
+        />
+
         <Divider sx={{ paddingTop: "10px" }} />
         <Box sx={{ padding: "10px 0px" }}>
           <DialogActions>
@@ -63,4 +89,4 @@ const RutClienteDialog = ({ isOpen, onClose, onError, onSuccess }) => {
   );
 };
 
-export default RutClienteDialog;
+export default ReciclajeDialog;

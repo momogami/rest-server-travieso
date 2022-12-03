@@ -1,5 +1,13 @@
 .commons {
   background-color: #E7EBF0;
-  height: '100vh';
-  width: '100wh';
+  height: 100vh;
+  width: 100vw;
+}
+
+.commons>.body {
+  padding-top: 3rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

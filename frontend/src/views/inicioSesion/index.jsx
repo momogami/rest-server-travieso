@@ -20,8 +20,8 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const response = await logIn(data.get("email"), data.get("password"));
-
     if (response.status === 200) {
+      localStorage.setItem('uid', response.data.usuario.uid);
       navigate("/menu");
     }
   };
