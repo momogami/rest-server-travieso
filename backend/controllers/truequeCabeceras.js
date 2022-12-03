@@ -93,6 +93,35 @@ const crearTruequeCabecera = async(req, res = response) => {
     
 };
 
+const actualizarConResumen = async (req, res) => {
+    const { idTruequeCabecera, resumen } = req.body;
+    
+    const truequeCabecera = await TruequeCabecera.findOne({ _id: idTruequeCabecera })
+
+    truequeCabecera.deudaTotal = resumen.deudaReciclaje;
+    truequeCabecera.descuento = resumen.descuento;
+    truequeCabecera.puntosTotales =  resumen.totalPuntos
+
+    if( resumen.estadoReciclaje == false ){
+        truequeCabecera.idsTruequeDetalle.forEach( async detalleTrueque => {
+            const truequeDetalle = await TruequeDetalle.find({ _id: detalleTrueque._id })
+            const detalle = await Detalle.find({ _id: truequeDetalle[0].idDetalle })
+
+            if ( detalle[0].tipoRopa == 'RECICLAJE') {
+                
+                truequeCabecera.idsTruequeDetalle = truequeCabecera.idsTruequeDetalle.filter((item) => item !== detalleTrueque )
+                await TruequeDetalle.findByIdAndDelete(detalleTrueque)
+                truequeCabecera.save()
+            }
+
+        });
+    }
+
+    truequeCabecera.save();
+
+    res.json(truequeCabecera)
+};
+
 const consultaEntreFechas = async( req, res ) => {
     
     const { fechaInicio, fechaFin } = req.body
@@ -107,37 +136,6 @@ const consultaEntreFechas = async( req, res ) => {
     res.json({
         msg: 'funca'
     })
-}
-
-const actualizarConResumen = async (req, res) => {
-    const { idTruequeCabecera, resumen } = req.body;
-    
-    const truequeCabecera = await TruequeCabecera.findOne({ _id: idTruequeCabecera })
-
-    truequeCabecera.deudaTotal = resumen.deudaReciclaje;
-    truequeCabecera.descuento = resumen.descuento;
-
-    if( resumen.estadoReciclaje == false ){
-        truequeCabecera.idsTruequeDetalle.forEach( async detalleTrueque => {
-            const truequeDetalle = await TruequeDetalle.find({ _id: detalleTrueque._id })
-            const detalle = await Detalle.find({ _id: truequeDetalle[0].idDetalle })
-
-            console.log(detalle[0].tipoRopa)
-
-            if ( detalle[0].tipoRopa == 'RECICLAJE') {
-                
-                truequeCabecera.idsTruequeDetalle = truequeCabecera.idsTruequeDetalle.filter((item) => item !== detalleTrueque )
-                await TruequeDetalle.findByIdAndDelete(detalleTrueque)
-                console.log()
-            
-            }
-
-        });
-    }
-
-    truequeCabecera.save();
-
-    res.json(truequeCabecera)
 }
 
 
