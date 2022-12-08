@@ -1,6 +1,18 @@
 import React, { useState } from "react";
-import { Box, Button, Paper, Table, TableContainer, TableHead, TableBody, TableRow, TableCell } from "@mui/material";
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableContainer,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  IconButton,
+} from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Edit, DeleteForever } from "@mui/icons-material";
 
 import FloatingCard from "../../components/ui/FloatingCard";
 import PremiumDialog from "../../components/dialogs/PremiumDialog";
@@ -20,7 +32,7 @@ const NuevoTrueque = () => {
     Segunda: [],
     Reciclaje: [],
   };
-  
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -37,28 +49,33 @@ const NuevoTrueque = () => {
   const onClickDonacion = () => setOpenDonacionDialog(true);
   const onClickReciclaje = () => setOpenReciclajeDialog(true);
 
-  const onClickCancelar = () => navigate('/menu');
+  const onClickDelete = (category, item) => {
+    const newArr = tableContents[category].filter((e) => e !== item);
+    setTableContents({ ...tableContents, [category]: newArr });
+  };
+
+  const onClickCancelar = () => navigate("/menu");
   const onClickContinuar = async () => {
     const ids = [];
     Object.keys(tableContents).forEach((key, index) => {
       const items = tableContents[key];
 
-      items.forEach(i => ids.push(i.id));
+      items.forEach((i) => ids.push(i.id));
     });
-    
+
     try {
-      const idUsuario = localStorage.getItem('uid');
+      const idUsuario = localStorage.getItem("uid");
       const idCliente = location.state.idCliente;
       const response = await crearTruequeCabecera({
         idUsuario: idUsuario,
         idCliente: idCliente,
         idsTruequeDetalle: ids,
       });
-      navigate('/resumenTrueque', {
+      navigate("/resumenTrueque", {
         state: {
           resumen: response.data.resumen,
           idTruequeCabecera: response.data.idTruequeCabecera,
-        }
+        },
       });
     } catch (error) {
       console.log(error.message);
@@ -72,7 +89,7 @@ const NuevoTrueque = () => {
     const tipo = resumen.prenda;
     const cantidad = resumen.cantidad;
     const puntos = resumen.puntos;
-    const deuda = typeof resumen.deuda === 'number' ? resumen.deuda : 0;
+    const deuda = typeof resumen.deuda === "number" ? resumen.deuda : 0;
     newArr.push({ id: truequeDetalle, tipo, cantidad, deuda, puntos });
 
     setTableContents({ ...tableContents, [key]: newArr });
@@ -87,9 +104,9 @@ const NuevoTrueque = () => {
               <TableCell>Tipo de trueque</TableCell>
               <TableCell>Prenda</TableCell>
               <TableCell>Cantidad</TableCell>
+              <TableCell />
               <TableCell>Deuda</TableCell>
               <TableCell>Puntos</TableCell>
-              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -100,7 +117,7 @@ const NuevoTrueque = () => {
               let totalPuntos = 0;
               const listaPrendas = [];
               const listaCantidades = [];
-              category.forEach((values, index) => {
+              category.forEach((values) => {
                 totalPuntos += values.puntos;
                 totalDeuda += values.deuda;
                 listaPrendas.push(values.tipo);
@@ -110,11 +127,60 @@ const NuevoTrueque = () => {
               return (
                 <TableRow
                   key={key}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell component="th" scope="row">{key}</TableCell>
-                  <TableCell>{listaPrendas.map((prenda, index) => <Box key={`${prenda}-${index}`}>{prenda}</Box>)}</TableCell>
-                  <TableCell>{listaCantidades.map((cantidad, index) => <Box key={`${cantidad}-${index}`}>{cantidad}</Box>)}</TableCell>
+                  <TableCell component="th" scope="row">
+                    {key}
+                  </TableCell>
+                  <TableCell>
+                    {listaPrendas.map((prenda, index) => (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          height: "31px",
+                        }}
+                        key={`${prenda}-${index}`}
+                      >
+                        {prenda}
+                      </Box>
+                    ))}
+                  </TableCell>
+                  <TableCell>
+                    {listaCantidades.map((cantidad, index) => (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          height: "31px",
+                        }}
+                        key={`${cantidad}-${index}`}
+                      >
+                        {cantidad}
+                      </Box>
+                    ))}
+                  </TableCell>
+                  <TableCell>
+                    {category.map((cat, index) => {
+                      return (
+                        <Box
+                          key={cat._id}
+                          sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "10px",
+                          }}
+                        >
+                          <IconButton>
+                            <Edit sx={{ fontSize: "15px" }} />
+                          </IconButton>
+                          <IconButton onClick={() => onClickDelete(key, cat)}>
+                            <DeleteForever sx={{ fontSize: "15px" }} />
+                          </IconButton>
+                        </Box>
+                      );
+                    })}
+                  </TableCell>
                   <TableCell>{totalDeuda}</TableCell>
                   <TableCell>{totalPuntos}</TableCell>
                 </TableRow>
@@ -127,19 +193,47 @@ const NuevoTrueque = () => {
   };
 
   return (
-    <FloatingCard title="Nuevo trueque" sx={{ width: 'fit-content' }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Button variant="contained" onClick={onClickPremium}>Premium</Button>
-          <Button variant="contained" onClick={onClickSegunda}>Segunda</Button>
-          <Button variant="contained" onClick={onClickDescuento}>Descuento</Button>
-          <Button variant="contained" onClick={onClickDonacion}>Donación</Button>
-          <Button variant="contained" onClick={onClickReciclaje}>Reciclaje</Button>
+    <FloatingCard title="Nuevo trueque" sx={{ width: "fit-content" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button variant="contained" onClick={onClickPremium}>
+            Premium
+          </Button>
+          <Button variant="contained" onClick={onClickSegunda}>
+            Segunda
+          </Button>
+          <Button variant="contained" onClick={onClickDescuento}>
+            Descuento
+          </Button>
+          <Button variant="contained" onClick={onClickDonacion}>
+            Donación
+          </Button>
+          <Button variant="contained" onClick={onClickReciclaje}>
+            Reciclaje
+          </Button>
         </Box>
         {buildTable()}
-        <Box sx={{ display: 'flex', flexDirection: 'row', gap: '20px' }}>
-          <Button sx={{ flex: 1 }} variant="contained" onClick={onClickCancelar}>Cancelar</Button>
-          <Button sx={{ flex: 1 }} variant="contained" onClick={onClickContinuar}>Continuar</Button>
+        <Box sx={{ display: "flex", flexDirection: "row", gap: "20px" }}>
+          <Button
+            sx={{ flex: 1 }}
+            variant="contained"
+            onClick={onClickCancelar}
+          >
+            Cancelar
+          </Button>
+          <Button
+            sx={{ flex: 1 }}
+            variant="contained"
+            onClick={onClickContinuar}
+          >
+            Continuar
+          </Button>
         </Box>
       </Box>
 
